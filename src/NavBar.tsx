@@ -1,17 +1,10 @@
 import { Alignment, AnchorButton, Navbar } from '@blueprintjs/core';
-import { gql } from 'apollo-boost';
+import { ME } from "./graphql/query/";
+
 import * as React from 'react';
 import { Query } from 'react-apollo';
+import { logout } from './index';
 
-const GET_VIEWER = gql`
-  {
-    me {
-      first_name
-      last_name
-      email
-    }
-  }
-`;
 class Nav extends React.Component {
   public componentDidMount(){
       document.title = "Timephile";
@@ -20,18 +13,24 @@ class Nav extends React.Component {
     return(
       <Navbar className="pt-dark">
         <Navbar.Group align={Alignment.LEFT}>
-          <Navbar.Heading><span className="pt-icon-shield"/> Timephile</Navbar.Heading>
+          <Navbar.Heading><span className="pt-icon-time"/> Timephile</Navbar.Heading>
         </Navbar.Group>
         <Navbar.Group align={Alignment.RIGHT}>
             <Navbar.Divider />
-            <Query query={GET_VIEWER}>
+            <Query query={ME} fetchPolicy="network-only">
               {({ loading, error, data, client }) => {
                 if (loading) { return <p>Loading</p>; }
-              if (error || !data || !data.viewer) { return <AnchorButton className="pt-minimal" href="/login" icon="log-in" text="Login" />; }
+                if (error || !data || !data.me) { return (
+                  <div>
+                    <AnchorButton className="pt-minimal" href="/signup" icon="upload" text="Sign Up" />
+                    <AnchorButton className="pt-minimal" href="/login" icon="log-in" text="Login" />
+                  </div>
+                ); }
                 return (
                   <div>
-                    <AnchorButton className="pt-minimal" href="/login" icon="user" text={`Welcome ${data.viewer.first_name}`} />
-                    <AnchorButton  className="pt-minimal" href="/logout" icon="log-out" text="Logout" />
+                    <AnchorButton className="pt-minimal" href="/login" icon="user" text={`Welcome ${data.me.name}`} />
+                    <AnchorButton  className="pt-minimal" icon="log-out" text="Logout" 
+                    onClick={() => logout()}/>
                   </div>
                 )
               }}
