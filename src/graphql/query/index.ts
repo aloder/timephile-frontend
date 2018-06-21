@@ -24,4 +24,14 @@ export const TIME_LOGS = gql`
          }
      }
  }
+`;
+
+export const TIME_TAGS = gql`
+    query($userId: ID!){
+        timeTags(userID: $userId){
+            id
+            name
+            description
+        }
+    }
 `

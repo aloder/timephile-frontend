@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@blueprintjs/core": "^2.3.1",
+    "@blueprintjs/datetime": "^2.0.3",
     "@blueprintjs/table": "^2.1.1",
     "apollo-cache-inmemory": "^1.2.4",
     "apollo-client": "^2.3.4",
@@ -13,6 +14,10 @@
     "formik": "1.0.0-beta.2",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
+    "import-sort-style-eslint": "^4.2.0",
+    "import-sort-style-module": "^4.2.0",
+    "moment": "^2.22.2",
+    "rc-time-picker": "^3.3.1",
     "react": "^16.4.1",
     "react-apollo": "^2.1.5",
     "react-dom": "^16.4.1",
@@ -37,6 +42,20 @@
     "@types/react-router": "^4.0.26",
     "@types/react-router-dom": "^4.2.7",
     "@types/yup": "^0.24.6",
+    "import-sort-cli": "^4.2.0",
+    "import-sort-parser-babylon": "^4.2.0",
+    "import-sort-parser-typescript": "^4.2.0",
+    "import-sort-style-renke": "^4.2.0",
     "typescript": "^2.9.2"
+  },
+  "importSort": {
+    ".js, .jsx, .es6, .es": {
+      "parser": "babylon",
+      "style": "eslint"
+    },
+    ".ts, .tsx": {
+      "parser": "typescript",
+      "style": "eslint"
+    }
   }
 }

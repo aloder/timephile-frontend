@@ -9,7 +9,7 @@ import { ME } from '../graphql/query';
 import LoginForm from './SignupForm';
 
 
-class Sigup extends React.Component {
+class Signup extends React.Component {
     public render() {
         return (
             <Mutation mutation={SIGN_UP}>
@@ -38,4 +38,4 @@ const submit = (
             },
         });
 }
-export default Sigup;
+export default Signup;

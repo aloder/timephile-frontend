@@ -26,3 +26,29 @@ export const SIGN_UP = gql`
     }
   }
 `;
+
+export const CREATE_TIME_LOG = gql`
+  mutation createTimeLog($title: String!, $text: String, $startTime: DateTime, $endTime: DateTime, $tagIds: [ID!]){
+    createTimeLog(title: $title, text: $text, startTime: $startTime, endTime: $endTime, tagIds: $tagIds){
+      id
+      title
+      text
+      startTime
+      endTime
+      tags{
+        name
+        description
+      }
+    }
+  }
+`
+
+export const CREATE_TIME_TAG = gql`
+    mutation createTimeTag($name: String!, $description: String!){
+        createTimeTag(name: $name, description: $description){
+            id
+            name
+            description
+        }
+    }
+`
