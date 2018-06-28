@@ -1,8 +1,11 @@
+import { Cell, Column, IColumnProps, Table, TableLoadingOption } from '@blueprintjs/table';
 import * as React from 'react';
 
-import { Table as BlueTable, Cell, Column, IColumnProps } from '@blueprintjs/table';
-
-class MyTable extends React.Component<IMyTableProps>{
+class MyTable extends React.Component<IMyTableProps, IMyTableStates>{
+    public constructor(props:IMyTableProps){
+        super(props);
+        this.state = {loading: true};
+    }
     public cellRender(rowIndex: number, columnIndex: number){
         const { format, data, layout, titles } = this.props;
         const element = layout[columnIndex];
@@ -31,11 +34,18 @@ class MyTable extends React.Component<IMyTableProps>{
         return col;
     }
     public render(){
+        const { loading, data } = this.props;
+        const length = (data) ? data.length : 100;
+        const loadingOptions = (loading) ? [TableLoadingOption.CELLS] : undefined;
         return (
             <div>
-                <BlueTable numRows={this.props.data.length}>
-                    {this.RenderTable()}
-                </BlueTable>
+                <Table
+                    numRows={length}
+                    loadingOptions={loadingOptions}
+                    enableGhostCells={true}
+                    >
+                    {(!loading) ?this.RenderTable() : undefined}
+                </Table>
             </div>
         );
     }
@@ -46,6 +56,10 @@ interface IMyTableProps {
     layout: string[];
     titles?: string[];
     format?: { [key: string]: ((obj: object) => string)};
+    loading: boolean
+}
+interface IMyTableStates {
+    loading: boolean;
 }
 
 export default MyTable;

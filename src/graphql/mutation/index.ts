@@ -24,7 +24,7 @@ export const SIGN_UP = gql`
             name
         }
     }
-  }
+    SignupForm}
 `;
 
 export const CREATE_TIME_LOG = gql`
@@ -36,6 +36,7 @@ export const CREATE_TIME_LOG = gql`
       startTime
       endTime
       tags{
+        id
         name
         description
       }

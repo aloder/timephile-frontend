@@ -25,10 +25,9 @@ class Login extends React.Component{
                 {(login, { data, error }) => {
                     if (data) {
                         indexLogin(data.login.token);
-
                         return (<Redirect to={'/'} />)
                     }
-                    return (<LoginForm submit={(values) => this.submit(values, login)}/>)}}
+                    return (<LoginForm error={error} submit={(values) => this.submit(values, login)}/>)}}
             </Mutation>
         );
     }

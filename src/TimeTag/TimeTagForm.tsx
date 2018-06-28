@@ -1,22 +1,21 @@
+import { Button, Card } from '@blueprintjs/core';
+import { Field, Form, Formik } from 'formik';
 import * as React from 'react';
 import * as Yup from 'yup';
 
-import { Button, Card } from '@blueprintjs/core';
-import { Field, Form, Formik } from 'formik';
-
 const renderFormComponents = (nameError: any, descriptionError: any) => {
     return (
-       <Form style={{display: 'flex', justifyContent: 'center', paddingTop: 20}}>
-           <Card style={{ minWidth:'30%'}}>
+       <Form>
+           <Card className='pt-fill'>
                <h3>Add Time Tag</h3>
                 <Field 
-                   className={`pt-input ${(nameError) ? "pt-intent-danger" : ""}`}
+                   className={`pt-input pt-fill ${(nameError) ? "pt-intent-danger" : ""}`}
                    name="timeTag.name" 
                    placeholder="Name *"
                    /> 
                <p className="pt-form-helper-text">{nameError}</p>
                <Field 
-                   className={`pt-input ${(descriptionError) ? "pt-intent-danger" : ""}`} 
+                   className={`pt-input pt-fill ${(descriptionError) ? "pt-intent-danger" : ""}`} 
                    name="timeTag.description" 
                    placeholder="Description"
                    />

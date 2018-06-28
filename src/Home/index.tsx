@@ -1,16 +1,30 @@
+import { Card } from '@blueprintjs/core';
+import { Cell, Column } from '@blueprintjs/table';
 import * as Moment from 'moment';
 import * as React from 'react';
-
-import { Cell, Column } from '@blueprintjs/table';
+import { Query } from 'react-apollo';
 
 import { IUserProps } from '../AuthRequired';
-import MyTable from './MyTable';
-import { Query } from 'react-apollo';
-import { TIME_LOGS } from '../graphql/query';
+import MyDatePicker from '../Components/Form/MyDatePicker';
+import { TIME_LOGS_RANGE } from '../graphql/query';
 import TimeEntry from '../TimeEntry/TimeEntry';
-import TimeTag from '../TimeTag/TimeEntry';
+import TimeTag from '../TimeTag/TimeTag';
+import MyTable from './MyTable';
 
-class Home extends React.Component<IUserProps>{
+class Home extends React.Component<IUserProps, IIndexState>{
+    public constructor(props: any){
+        super(props);
+        this.state = {selectedDate: new Date(Moment().format('L'))}
+    }
+    public onChange(event: any){
+        const { value } = event.target;
+        if (!value) {
+            return;
+        }
+        this.setState({
+            selectedDate: new Date(Moment(value).format('L'))
+        })
+    }
     public cellRender(rowIndex: number, columnIndex: number){
         return <Cell>{this}</Cell>
     }
@@ -21,39 +35,69 @@ class Home extends React.Component<IUserProps>{
         if (!this.props.me) {
             return;
         }
+        const { selectedDate } = this.state;
+        const endDate = new Date(selectedDate);
+        endDate.setDate(endDate.getDate() + 1);
         return (
-            <Query query={TIME_LOGS} variables={{ userId: this.props.me.id }} fetchPolicy="cache-and-network">
-                {({loading, error, data, client}) => {
-                    if (loading) {
-                        return (<div />);
-                    }
-                    if (error) {
-                        return (`error ${error}`);
-                    }
-                    const format: { [key: string] : (obj: any) => string } = {};
-                    /* tslint:disable:no-string-literal */
-                    format['startTime'] = (date: any) => formatTime(date, "h:mm a");
-                    format['endTime'] = (date: any) => formatTime(date, "h:mm a"); 
-                    format['Date'] = (date: any) => formatTime(date, "l");
-                    return (
-                        <div>
-                            <MyTable 
-                                titles={['Title', 'Text', 'Date','Start', 'End']}
-                                data={data.timeLogs} 
-                                format={format}
-                                layout={['title', 'text', 'startTime', 'startTime', 'endTime']}
-                            />
-                            <TimeEntry me={this.props.me} />
-                            <TimeTag me={this.props.me} />
+            <div style={{display: 'flex', flexDirection: 'row'}}>
+                <div style={{display: 'flex', flexDirection:'column'}}>
+                    <Card className='pt-fill'>
+                        <h3>Select Date</h3>
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                        <MyDatePicker
+                            showActionBar={true} 
+                            value={selectedDate} 
+                            name="selectedDate" 
+                            onChange={(event) => this.onChange(event)} />
                         </div>
-                    );
-                }}
-                
-            </Query>
+                    </Card>
+                    <TimeEntry me={this.props.me} />
+                    <TimeTag me={this.props.me} />
+                </div>
+                <div style={{flexGrow: 1, paddingLeft: 5, height: '100%', overflow:'auto'}}>
+                    <Query query={TIME_LOGS_RANGE} 
+                        variables={{ userId: this.props.me.id, startDate: selectedDate, endDate }} 
+                        fetchPolicy="cache-and-network">
+                        {({loading, error, data, client}) => {
+                            if (error) {
+                                return (`error ${error}`);
+                            }
+                            const format: { [key: string] : (obj: any) => string } = {};
+                            /* tslint:disable:no-string-literal */
+                            format['startTime'] = (date: any) => formatTime(date, "h:mm a");
+                            format['endTime'] = (date: any) => formatTime(date, "h:mm a"); 
+                            format['Date'] = (date: any) => formatTime(date, "l");
+                            format['tags'] = (tags: any) => {
+                                let str = '';
+                                if (!tags){
+                                    return str;
+                                }
+                                for (const tag of tags) {
+                                    str += tag.name;
+                                }
+                                return str;
+                            };
+                            return (
+                                <div>
+                                    <MyTable 
+                                        loading={loading}
+                                        titles={['Title', 'Text', 'Date','Start', 'End', 'Tags']}
+                                        data={data.timeLogsRange} 
+                                        format={format}
+                                        layout={['title', 'text', 'startTime', 'startTime', 'endTime', 'tags']}
+                                    />
+                                </div>
+                            );
+                        }}
+                    </Query>
+                </div>
+            </div>
         );
     }
 }
-
+interface IIndexState {
+    selectedDate: Date;
+}
 const formatTime = (date: any, formatStr: string, notValidRet: string = "") =>{
     const m = Moment(date);
     if(m.isValid()){

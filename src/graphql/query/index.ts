@@ -26,9 +26,26 @@ export const TIME_LOGS = gql`
  }
 `;
 
+export const TIME_LOGS_RANGE = gql`
+ query($userId: ID!, $startDate: DateTime!, $endDate: DateTime!){
+     timeLogsRange(userId: $userId, startDate: $startDate, endDate: $endDate){
+         id
+         title
+         text
+         startTime
+         endTime
+         tags {
+             id
+             name
+             description
+         }
+     }
+ }
+`;
+
 export const TIME_TAGS = gql`
     query($userId: ID!){
-        timeTags(userID: $userId){
+        timeTags(userId: $userId){
             id
             name
             description

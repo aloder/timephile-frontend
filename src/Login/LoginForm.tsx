@@ -1,8 +1,10 @@
 import { Button, Card } from '@blueprintjs/core';
+import { ApolloError } from 'apollo-client';
 import { Field, Form, Formik } from 'formik';
 import * as React from 'react';
 import * as Yup from 'yup';
-const renderFormComponents = (emailError: any, passwordError: any) => {
+
+const renderFormComponents = (emailError: any, passwordError: any, error: ApolloError | undefined) => {
     return (
        <div style={{display: 'flex', justifyContent: 'center', paddingTop: 20}}>
        <Card style={{ minWidth:'25%'}}>
@@ -22,9 +24,10 @@ const renderFormComponents = (emailError: any, passwordError: any) => {
                    /> 
                <p className="pt-form-helper-text">{passwordError}</p>
                <Button type="submit" >Submit</Button>
+               <div className="pt-form-helper-text">{(error) ? error.graphQLErrors[0].message : ""}</div>
            </Form>
-       </Card>
-   </div>
+        </Card>
+        </div>
     );
    }
 
@@ -52,8 +55,7 @@ class LoginForm extends React.Component<ILoginProps> {
                             passwordError =  props.errors.login.password;
                         }
                     }
-                    return (renderFormComponents(emailError, passwordError));
-
+                    return (renderFormComponents(emailError, passwordError, this.props.error));
                 }}
             />
         </div>
@@ -61,8 +63,8 @@ class LoginForm extends React.Component<ILoginProps> {
     }
 }
 
-
 interface ILoginProps {
+    error: ApolloError | undefined;
     submit(model: { email: any, password: any }): void;
 }
 const schema = Yup.object().shape({

@@ -1,40 +1,37 @@
+import { Button, Card } from '@blueprintjs/core';
+import { Field, Form, Formik } from 'formik';
 import * as React from 'react';
 import * as Yup from 'yup';
 
-import { Button, Card } from '@blueprintjs/core';
-import { DateInput, TimePicker } from '@blueprintjs/datetime';
-import { Field, Form, Formik } from 'formik';
+import { IUserProps } from '../AuthRequired';
+import MyDateInput from '../Components/Form/MyDateInput';
+import TimeTagSelector from '../Components/Form/TimeTagSelector';
+import TimeToggle from '../Components/Form/TimeToggle';
 
-const renderFormComponents = (titleError: any, textError: any, dateError: any, startTimeError: any, endTimeError: any) => {
+
+
+class TimeEntryForm extends React.Component<ITimeLogProps> {
+    public renderFormComponents(titleError: any, textError: any, dateError: any, startTimeError: any, endTimeError: any) {
     return (
-       <Form style={{display: 'flex', justifyContent: 'center', paddingTop: 20}}>
-           <Card style={{ minWidth:'30%'}}>
+       <Form>
+           <Card>
                <h3>Add Time</h3>
                 <Field 
-                   className={`pt-input ${(titleError) ? "pt-intent-danger" : ""}`}
+                   className={`pt-input pt-fill ${(titleError) ? "pt-intent-danger" : ""}`}
                    name="timeLog.title" 
                    placeholder="Title*"
                    /> 
                <p className="pt-form-helper-text">{titleError}</p>
                <Field 
-                   className={`pt-input ${(textError) ? "pt-intent-danger" : ""}`} 
+                   className={`pt-input pt-fill ${(textError) ? "pt-intent-danger" : ""}`} 
                    name="timeLog.text" 
                    placeholder="Description"
                    />
-               <p 
-               className="pt-form-helper-text">{textError}</p>
+               <p className="pt-form-helper-text">{textError}</p>
                <Field 
-                    style={{ display: 'flex', flexDirection: 'column'}}
                     name="timeLog.date" 
                     render={({ field }:{ field: any } ) => (
-                        <div onBlur={() => field.onBlur({target: {name:"timeLog.date"}})}>
-                            <DateInput
-                                formatDate={date => date ? date.toLocaleDateString() : ""}
-                                parseDate={str => new Date(str)}
-                                placeholder={"M/D/YYYY"}
-                                onChange={(date) => field.onChange({target: { value: date, name: "timeLog.date" }})}
-                            />
-                        </div>
+                        <MyDateInput {...field} />
                     )}
                     /> 
                 <p>{dateError}</p>
@@ -43,12 +40,7 @@ const renderFormComponents = (titleError: any, textError: any, dateError: any, s
                     <Field 
                         name="timeLog.startTime" 
                         render={({ field }:{ field: any } ) => (
-                            <div onBlur={() => field.onBlur({target: {name:"timeLog.startTime"}})}>
-                                <TimePicker
-                                    useAmPm={true}
-                                    onChange={(date) => field.onChange({target: { value: date, name: "timeLog.startTime" }})}
-                                    />
-                            </div>
+                            <TimeToggle {...field} />
                         )}
                         /> 
                     <p className="pt-form-helper-text">{startTimeError}</p>
@@ -58,14 +50,18 @@ const renderFormComponents = (titleError: any, textError: any, dateError: any, s
                     <Field 
                         name="timeLog.endTime" 
                         render={({ field }:{ field: any } ) => (
-                            <div onBlur={() => field.onBlur({target: {name:"timeLog.endTime"}})}>
-                                <TimePicker 
-                                    onChange={(date) => field.onChange({target: { value: date, name: "timeLog.endTime" }})}
-                                    useAmPm={true}  />
-                            </div>
+                            <TimeToggle {...field} />
                         )}
                         /> 
                     <p className="pt-form-helper-text">{endTimeError}</p>
+                </div>
+                <div>
+                    <Field
+                        name="timeLog.timeTagId"
+                        render={({ field } : { field: any })=> (
+                            <TimeTagSelector {...field}/>
+                        )}
+                    />
                 </div>
                 <p />
                <Button type="submit" >Submit</Button>
@@ -73,8 +69,6 @@ const renderFormComponents = (titleError: any, textError: any, dateError: any, s
        </Form>
     );
    }
-
-class TimeEntryForm extends React.Component<ITimeLogProps> {
     public render(){
         return (
             <div>
@@ -85,17 +79,33 @@ class TimeEntryForm extends React.Component<ITimeLogProps> {
                         endTime: new Date(),
                         startTime: new Date(),
                         text: '',
+                        timeTagId: '',
                         title: '',
                     }
                 }}
                 validationSchema={schema}
-                onSubmit={values => this.props.submit(values.timeLog)}
+                onSubmit={values => {
+                    const formatTime = (currentDate: Date, time: Date):Date => {
+                        currentDate.setSeconds(time.getSeconds());
+                        currentDate.setMinutes(time.getMinutes());
+                        currentDate.setHours(time.getHours());
+                        return currentDate;
+                    }
+                    const { startTime, endTime, date } = values.timeLog;
+                    values.timeLog.startTime = formatTime(date, startTime);
+                    values.timeLog.endTime = formatTime(date, endTime); 
+                    if (values.timeLog.startTime > values.timeLog.endTime){
+                        // Adds a day if we are going over midnight
+                        values.timeLog.endTime.setDate(values.timeLog.endTime.getDate() + 1);
+                    }
+                    this.props.submit(values.timeLog)
+                }}
                 render={props => {
                     const { timeLog } = props.errors
                     if(timeLog){
-                        return (renderFormComponents(timeLog.title, timeLog.text,timeLog.date, timeLog.startTime, timeLog.endTime));
+                        return (this.renderFormComponents(timeLog.title, timeLog.text,timeLog.date, timeLog.startTime, timeLog.endTime));
                     }
-                    return(renderFormComponents(null, null, null, null, null));
+                    return(this.renderFormComponents(null, null, null, null, null));
                 }}
             />
         </div>
@@ -105,8 +115,8 @@ class TimeEntryForm extends React.Component<ITimeLogProps> {
  
 
 
-interface ITimeLogProps {
-    submit(model: {title: string, text: string, startTime: Date, endTime: Date }): void;
+interface ITimeLogProps extends IUserProps{ 
+    submit(model: {title: string, text: string, startTime: Date, endTime: Date, timeTagId: string}): void;
 }
 const schema = Yup.object().shape({
         timeLog: Yup.object().shape({
@@ -116,6 +126,7 @@ const schema = Yup.object().shape({
             startTime: Yup.date()
                 .required('Required'),
             text: Yup.string(),
+            timeTagId: Yup.string(),
             title: Yup.string()
                 .required('Required'),
         })

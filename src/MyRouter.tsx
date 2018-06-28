@@ -13,11 +13,10 @@ class MyRouter extends React.Component {
         <BrowserRouter>
           <div>
             <NavBar />
-            <Route exact={true} path="/"  />
             <Route exact={true} path="/login"  component={Login}/>
             <Route exact={true} path="/signup"  component={Signup}/>
             <Route exact={true} path="/auth" render={() => <p>hello</p>}/>
-            <Route exact={true} path="/home" render={(props) => (
+            <Route exact={true} path="/" render={(props) => (
               <AuthRequired>
                 <Home />
               </AuthRequired>
