@@ -2,6 +2,10 @@
   "name": "timephile-frontend",
   "version": "0.1.0",
   "private": true,
+  "main": "/src/App.tsx",
+  "engines": {
+    "node": "10.4.1"
+  },
   "dependencies": {
     "@blueprintjs/core": "^2.3.1",
     "@blueprintjs/datetime": "^2.0.3",

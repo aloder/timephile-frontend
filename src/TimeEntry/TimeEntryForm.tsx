@@ -36,7 +36,7 @@ class TimeEntryForm extends React.Component<ITimeLogProps> {
                     /> 
                 <p>{dateError}</p>
                 <div style={{display: 'inline-flex', flexDirection: 'column'}}>
-                   <p style={{display: 'flex', padding: 1, margin: 1}}className="pt-ui-text">Start Time</p> 
+                   <p style={{padding: 1, margin: 1}}className="pt-ui-text">Start Time</p> 
                     <Field 
                         name="timeLog.startTime" 
                         render={({ field }:{ field: any } ) => (
@@ -85,20 +85,21 @@ class TimeEntryForm extends React.Component<ITimeLogProps> {
                 }}
                 validationSchema={schema}
                 onSubmit={values => {
-                    const formatTime = (currentDate: Date, time: Date):Date => {
-                        currentDate.setSeconds(time.getSeconds());
-                        currentDate.setMinutes(time.getMinutes());
-                        currentDate.setHours(time.getHours());
-                        return currentDate;
-                    }
+                    const { timeLog } = values;
                     const { startTime, endTime, date } = values.timeLog;
-                    values.timeLog.startTime = formatTime(date, startTime);
-                    values.timeLog.endTime = formatTime(date, endTime); 
-                    if (values.timeLog.startTime > values.timeLog.endTime){
-                        // Adds a day if we are going over midnight
-                        values.timeLog.endTime.setDate(values.timeLog.endTime.getDate() + 1);
+                    const formatTime = (currentDate: Date, time: Date):Date => {
+                        const newDate = new Date(currentDate);
+                        newDate.setSeconds(time.getSeconds());
+                        newDate.setMinutes(time.getMinutes());
+                        newDate.setHours(time.getHours());
+                        return newDate;
                     }
-                    this.props.submit(values.timeLog)
+                    timeLog.startTime = formatTime(date, startTime);
+                    timeLog.endTime = formatTime(date, endTime); 
+                    if (timeLog.startTime > timeLog.endTime){
+                        timeLog.endTime.setDate(timeLog.endTime.getDate() + 1);
+                    }
+                    this.props.submit(timeLog)
                 }}
                 render={props => {
                     const { timeLog } = props.errors
@@ -122,7 +123,7 @@ const schema = Yup.object().shape({
         timeLog: Yup.object().shape({
             date: Yup.date()
             .required('Required'),
-            endTime: Yup.date(),
+            endTime: Yup.date().required('Required'),
             startTime: Yup.date()
                 .required('Required'),
             text: Yup.string(),

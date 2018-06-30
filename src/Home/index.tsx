@@ -5,6 +5,7 @@ import * as React from 'react';
 import { Query } from 'react-apollo';
 
 import { IUserProps } from '../AuthRequired';
+import CircularSlider, { IArcObj } from '../Components/CircleSlider';
 import MyDatePicker from '../Components/Form/MyDatePicker';
 import { TIME_LOGS_RANGE } from '../graphql/query';
 import TimeEntry from '../TimeEntry/TimeEntry';
@@ -77,8 +78,25 @@ class Home extends React.Component<IUserProps, IIndexState>{
                                 }
                                 return str;
                             };
+                            const arcs: IArcObj[] = [];
+                            const convertTimeToAngle = (date: Date): number => {
+                                const c = new Date(date);
+                                const time = c.getMinutes() + c.getHours() * 60;
+                                return (Math.abs(time/(24*60)-1) * 360 - 90) %360 ;
+                            }
+                            if(data && data.timeLogsRange) {
+                                for(const r of data.timeLogsRange){
+                                    const a1 = convertTimeToAngle(r.startTime);
+                                    const a2 = convertTimeToAngle(r.endTime);
+                                    console.warn(a1, a2)
+                                    arcs.push({ angles: [a1, a2], color: "blue" })
+                                }
+                            }
                             return (
                                 <div>
+                                    <Card>
+                                        <CircularSlider arcs={arcs}/>
+                                    </Card>
                                     <MyTable 
                                         loading={loading}
                                         titles={['Title', 'Text', 'Date','Start', 'End', 'Tags']}

@@ -4,7 +4,9 @@
     "jsx-no-lambda": false,
     "jsx-boolean-value" : ["never"],
     "member-access": [true],
-    "no-console": [true, "log"]
+    "no-console": [true, "log"],
+    "object-literal-sort-keys": false,
+    "member-ordering": false
   },
   "linterOptions": {
     "exclude": [

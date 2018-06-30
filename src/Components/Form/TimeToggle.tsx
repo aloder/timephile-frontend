@@ -4,14 +4,15 @@ import * as React from 'react';
 
 class TimeToggle extends React.Component<ITimeToggleProps, any> {
  public render(){
+     const { value, name, onChange } = this.props
     return(
     <div style={{display:'flex'}}> 
         <TimePicker
-            value={this.props.value}
+            value={value}
             useAmPm={true}
             onChange={(date) =>{
-                if(this.props.onChange){
-                    this.props.onChange({target: { value: date, name: "timeLog.startTime" }})
+                if(onChange){
+                    onChange({target: { value: date, name }})
                 }
             }} 
             />
@@ -21,6 +22,7 @@ class TimeToggle extends React.Component<ITimeToggleProps, any> {
 }
 export interface ITimeToggleProps{
     value: Date;
+    name: string;
     onChange(event: any): any;
 }
 export default TimeToggle

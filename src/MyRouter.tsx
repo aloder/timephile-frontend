@@ -2,6 +2,7 @@ import * as React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
 import AuthRequired from './AuthRequired';
+import SliderPage from './Components/CircleSlider/SliderPage';
 import Home from './Home';
 import Login from './Login/Login';
 import NavBar from './NavBar';
@@ -13,9 +14,9 @@ class MyRouter extends React.Component {
         <BrowserRouter>
           <div>
             <NavBar />
+            <Route exact={true} path="/circle"  component={SliderPage}/>
             <Route exact={true} path="/login"  component={Login}/>
             <Route exact={true} path="/signup"  component={Signup}/>
-            <Route exact={true} path="/auth" render={() => <p>hello</p>}/>
             <Route exact={true} path="/" render={(props) => (
               <AuthRequired>
                 <Home />

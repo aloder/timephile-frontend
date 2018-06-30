@@ -17,10 +17,9 @@ class Nav extends React.Component {
         </Navbar.Group>
         <Navbar.Group align={Alignment.RIGHT}>
             <Navbar.Divider />
-            <Query query={ME} fetchPolicy="network-only">
+            <Query query={ME} fetchPolicy="cache-only">
               {({ loading, error, data, client }) => {
-                if (loading) { return <p>Loading</p>; }
-                if (error || !data || !data.me) { return (
+                if (loading || error || !data || !data.me) { return (
                   <div>
                     <AnchorButton className="pt-minimal" href="/signup" icon="upload" text="Sign Up" />
                     <AnchorButton className="pt-minimal" href="/login" icon="log-in" text="Login" />

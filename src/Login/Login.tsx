@@ -10,22 +10,30 @@ import LoginForm from './LoginForm';
 
 
 class Login extends React.Component{
-    public submit(model : { email: string, password: string }, login: MutationFn<any, OperationVariables>) {
+    public submit(
+        model : {
+            email: string, 
+            password: string 
+        }, 
+        login: MutationFn<any, OperationVariables>
+    ) {
         login({
             update: (store, { data } ) => {
                 const newData = { me: data.login.user}
                 store.writeQuery({ query: ME, data: newData });
+                indexLogin(data.login.token);
             },
             variables: { email: model.email, password: model.password },
+            refetchQueries: [{ query: ME }]
         });
     }
     public render() {
         return (
             <Mutation mutation={LOGIN}>
                 {(login, { data, error }) => {
+                    console.warn(data);
                     if (data) {
-                        indexLogin(data.login.token);
-                        return (<Redirect to={'/'} />)
+                        return <Redirect to={'/'} />
                     }
                     return (<LoginForm error={error} submit={(values) => this.submit(values, login)}/>)}}
             </Mutation>
