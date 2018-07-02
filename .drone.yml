@@ -1,0 +1,26 @@
+  build:
+    image: docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker build -t aloder/timephile-frontend:${DRONE_COMMIT_SHA:0:7} .
+    
+  deploy:
+    image: docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker rm -f timephile-frontend/production
+      - docker run -p 4000:80 -d --name timephile-frontend/production aloder/timephile-frontend:${DRONE_COMMIT_SHA:0:7}
+    when:
+      branch: master
+  
+  deploy:
+    image: docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker rm -f timephile-frontend
+      - docker run -p 4500:80 -d --name timephile-frontend/dev aloder/timephile-frontend:${DRONE_COMMIT_SHA:0:7}
+    when:
+      branch: dev

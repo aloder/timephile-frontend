@@ -8,8 +8,8 @@ const getPointCoordString = (r: number, angle: number) => {
   return `${x}px ${y}px`;
 }
 
-const Arc = ({r, angle, initialAngle, width, color}:
-     { r: number, angle: number, initialAngle: number, width: number, color?: string }) => {
+const Arc = ({r, angle, initialAngle, width, color, onSelect}:
+     { r: number, angle: number, initialAngle: number, width: number, color?: string, onSelect?: any}) => {
   const relativeAngle = getRelativeAngle(angle, initialAngle) 
   const center = `${r}px ${r}px`;
   const start = getPointCoordString(r, initialAngle);
@@ -41,6 +41,7 @@ const Arc = ({r, angle, initialAngle, width, color}:
         position: 'absolute',
         width: '100%',
       }}
+      onSelect={(event) => onSelect(event)}
     />
 )}
 

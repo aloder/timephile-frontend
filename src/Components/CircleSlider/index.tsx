@@ -8,7 +8,7 @@ import { getRelativeAngle, pipe, toDeg, toRad } from './utils';
 class App extends React.Component<ICircleProps, IArc> {
   public static defaultProps: ICircleDefaultProps= {
     r: 200,
-    initialAngle: -90,
+    initialAngle: 90,
     trackWidth: 50,
     trackColor: '#f5f5dc',
     arcColor: '#7985f1',
@@ -17,7 +17,6 @@ class App extends React.Component<ICircleProps, IArc> {
     thumbBorderWidth: 5,
     thumbBorderColor: '#cccccc',
     onChange: (value: any) => undefined
-    
   }
   
   constructor(props: ICircleProps) {
@@ -242,7 +241,9 @@ interface IArc {
 }
 export interface IArcObj {
   angles: number[];
-  color: string
+  title?: string;
+  id?: string;
+  color: string;
 }
 type PropsWithDefaults = ICircleProps & ICircleDefaultProps;
 
