@@ -54,7 +54,6 @@ class App extends React.Component<ICircleProps, IArc> {
   }
 
   private handleSelect = (event: React.MouseEvent<HTMLDivElement>, index: number, angle: number) => {
-    console.warn("select");
     this.trackLeave()
     document.addEventListener('mousemove', (ev) => this.moveArc(ev, index))
     this.setState({currentArcIndex: index, currentAngle: angle})
@@ -70,8 +69,8 @@ class App extends React.Component<ICircleProps, IArc> {
 
 
   private calculateAngle = (mouseX: number, mouseY: number) => {
-    const { r }  = this.props as PropsWithDefaults;
-    const x = mouseX - r - this.offsets.left;
+    const { r, trackWidth }  = this.props as PropsWithDefaults;
+    const x = mouseX - r + trackWidth - this.offsets.left;
     const y = - mouseY + r + this.offsets.top;
     const angle = toDeg(Math.atan(y / x)) +
       ((x < 0) ? 180 : 0) +

@@ -88,7 +88,6 @@ class Home extends React.Component<IUserProps, IIndexState>{
                                 for(const r of data.timeLogsRange){
                                     const a1 = convertTimeToAngle(r.startTime);
                                     const a2 = convertTimeToAngle(r.endTime);
-                                    console.warn(a1, a2)
                                     arcs.push({ angles: [a1, a2], color: "blue" })
                                 }
                             }
