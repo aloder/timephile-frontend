@@ -8,8 +8,8 @@ COPY . .
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 ADD package.json /usr/src/app/package.json
-RUN npm install -g yarn
-RUN yarn
+ADD yarn.lock /usr/src/app/yarn.lock
+RUN yarn install --frozen-lockfile
 RUN yarn build
 
 FROM nginx:1.13.3-alpine
