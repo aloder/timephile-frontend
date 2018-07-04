@@ -5,7 +5,6 @@ pipeline:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
       - docker build -t aloder/timephile-frontend:${DRONE_COMMIT_SHA:0:7} .
-    
   deploy:
     image: docker
     volumes:
