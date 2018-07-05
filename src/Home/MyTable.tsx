@@ -9,7 +9,13 @@ class MyTable extends React.Component<IMyTableProps, IMyTableStates>{
     public cellRender(rowIndex: number, columnIndex: number){
         const { format, data, layout, titles } = this.props;
         const element = layout[columnIndex];
-        let value = data[rowIndex][element];
+        if (typeof data == null) {
+            return <div />;
+        }
+        if (typeof data[rowIndex] == null){
+            return <div />
+        }
+        let value = data[rowIndex]![element];
         if (format && titles && format[titles[columnIndex]]){
             value = format[titles[columnIndex]](value);
         } else {
@@ -43,6 +49,7 @@ class MyTable extends React.Component<IMyTableProps, IMyTableStates>{
                     numRows={length}
                     loadingOptions={loadingOptions}
                     enableGhostCells={true}
+                    enableFocusedCell={true}
                     >
                     {(!loading) ?this.RenderTable() : undefined}
                 </Table>
@@ -52,7 +59,7 @@ class MyTable extends React.Component<IMyTableProps, IMyTableStates>{
 }
 
 interface IMyTableProps {
-    data: object[];
+    data: Array<(object | null)>;
     layout: string[];
     titles?: string[];
     format?: { [key: string]: ((obj: object) => string)};

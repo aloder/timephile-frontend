@@ -40,7 +40,7 @@ class  AuthRequired extends React.Component{
 
 export interface IUserProps  {
     me?: {
-        id: number,
+        id: string,
         name: string, 
         email: string 
     };

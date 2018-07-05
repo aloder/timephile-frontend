@@ -24,17 +24,21 @@ export const SIGN_UP = gql`
             name
         }
     }
-    SignupForm}
+  }
 `;
 
 export const CREATE_TIME_LOG = gql`
-  mutation createTimeLog($title: String!, $text: String, $startTime: DateTime, $endTime: DateTime, $tagIds: [ID!]){
-    createTimeLog(title: $title, text: $text, startTime: $startTime, endTime: $endTime, tagIds: $tagIds){
+  mutation createTimeLog($title: String!, $text: String, $date: DateTime, $startTime: DateTime, $endTime: DateTime, $totalTime: Int, $tagIds: [ID!]){
+    createTimeLog(title: $title, text: $text, date: $date, startTime: $startTime, endTime: $endTime, totalTime: $totalTime, tagIds: $tagIds){
       id
       title
       text
+      date
+      totalTime
       startTime
       endTime
+      isRange
+      deleted
       tags{
         id
         name
@@ -43,7 +47,34 @@ export const CREATE_TIME_LOG = gql`
     }
   }
 `
-
+export const UPDATE_TIME_LOG = gql`
+  mutation UpdateTimeLog($id: ID!, $title: String!, $text: String, $date: DateTime, $startTime: DateTime, $endTime: DateTime, $totalTime: Int){
+   updateTimeLog(id: $id, title: $title, text: $text, date: $date, startTime: $startTime, endTime: $endTime, totalTime: $totalTime){
+      id
+      title
+      text
+      date
+      totalTime
+      startTime
+      endTime
+      isRange
+      deleted
+      tags{
+        id
+        name
+        description
+      }
+    }
+  }
+`;
+export const DELETE_TIME_LOG = gql`
+  mutation DeleteTimeLog($id: ID!){
+    deleteTimeLog(id: $id){
+      id
+      deleted
+    }
+  }
+`
 export const CREATE_TIME_TAG = gql`
     mutation createTimeTag($name: String!, $description: String!){
         createTimeTag(name: $name, description: $description){

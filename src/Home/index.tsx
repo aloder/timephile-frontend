@@ -1,16 +1,18 @@
 import { Card } from '@blueprintjs/core';
-import { Cell, Column } from '@blueprintjs/table';
 import * as Moment from 'moment';
 import * as React from 'react';
 import { Query } from 'react-apollo';
-
 import { IUserProps } from '../AuthRequired';
 import CircularSlider, { IArcObj } from '../Components/CircleSlider';
 import MyDatePicker from '../Components/Form/MyDatePicker';
+import UpdateTimeCardController from '../Components/TimeCard/updateTimeCardController';
 import { TIME_LOGS_RANGE } from '../graphql/query';
+import { timeLogsRange, timeLogsRangeVariables } from '../schemaTypes';
 import TimeEntry from '../TimeEntry/TimeEntry';
 import TimeTag from '../TimeTag/TimeTag';
-import MyTable from './MyTable';
+// import MyTable from './MyTable';
+
+
 
 class Home extends React.Component<IUserProps, IIndexState>{
     public constructor(props: any){
@@ -26,19 +28,13 @@ class Home extends React.Component<IUserProps, IIndexState>{
             selectedDate: new Date(Moment(value).format('L'))
         })
     }
-    public cellRender(rowIndex: number, columnIndex: number){
-        return <Cell>{this}</Cell>
-    }
-    public tableColumn(name: string, columnIndex: number){
-        return <Column name={name} cellRenderer={(rowIndex) => this.cellRender(rowIndex, columnIndex)}/>
-    }
     public render(){
         if (!this.props.me) {
             return;
         }
         const { selectedDate } = this.state;
         const endDate = new Date(selectedDate);
-        endDate.setDate(endDate.getDate() + 1);
+        endDate.setDate(endDate.getDate() + 1)
         return (
             <div style={{display: 'flex', flexDirection: 'row'}}>
                 <div style={{display: 'flex', flexDirection:'column'}}>
@@ -52,11 +48,11 @@ class Home extends React.Component<IUserProps, IIndexState>{
                             onChange={(event) => this.onChange(event)} />
                         </div>
                     </Card>
-                    <TimeEntry me={this.props.me} />
+                    <TimeEntry query={TIME_LOGS_RANGE} variables={{ startDate: selectedDate, endDate }} />
                     <TimeTag me={this.props.me} />
                 </div>
                 <div style={{flexGrow: 1, paddingLeft: 5, height: '100%', overflow:'auto'}}>
-                    <Query query={TIME_LOGS_RANGE} 
+                    <Query<timeLogsRange,timeLogsRangeVariables> query={TIME_LOGS_RANGE} 
                         variables={{ userId: this.props.me.id, startDate: selectedDate, endDate }} 
                         fetchPolicy="cache-and-network">
                         {({loading, error, data, client}) => {
@@ -84,25 +80,32 @@ class Home extends React.Component<IUserProps, IIndexState>{
                                 const time = c.getMinutes() + c.getHours() * 60;
                                 return (Math.abs(time/(24*60)-1) * 360 - 90) %360 ;
                             }
+                            // let taken:Array<(object| null)> = [];
+                            // let notTaken:Array<(object | null)> =  [];
+                            const timeCards:Array<React.ReactElement<UpdateTimeCardController>> = [];
                             if(data && data.timeLogsRange) {
                                 for(const r of data.timeLogsRange){
-                                    const a1 = convertTimeToAngle(r.startTime);
-                                    const a2 = convertTimeToAngle(r.endTime);
-                                    arcs.push({ angles: [a1, a2], color: "blue" })
+                                    if(!r!.deleted){
+                                        timeCards.push(<Card key={`card ${r!.id}`}><UpdateTimeCardController key={r!.id} {...r!}/></Card>);
+                                        if(r!.totalTime == null || r!.isRange){
+                                            const a1 = convertTimeToAngle(r!.startTime);
+                                            const a2 = convertTimeToAngle(r!.endTime);
+                                            arcs.push({ id: `arc ${r!.id}`, angles: [a1, a2], color: "blue" })
+                                        }
+                                    }
                                 }
+                                // taken = data!.timeLogsRange!.filter(x => x != null && x.endTime != null && x.startTime != null);
+                                // notTaken = data!.timeLogsRange.filter(x => x != null && x.startTime == null && x.endTime == null);
                             }
                             return (
-                                <div>
+                                <div style={{display: 'inline-flex'}}>
                                     <Card>
                                         <CircularSlider arcs={arcs}/>
                                     </Card>
-                                    <MyTable 
-                                        loading={loading}
-                                        titles={['Title', 'Text', 'Date','Start', 'End', 'Tags']}
-                                        data={data.timeLogsRange} 
-                                        format={format}
-                                        layout={['title', 'text', 'startTime', 'startTime', 'endTime', 'tags']}
-                                    />
+                                    <Card>
+                                        <h2>{Moment(selectedDate).format('l')}</h2>
+                                        {timeCards}
+                                    </Card>
                                 </div>
                             );
                         }}

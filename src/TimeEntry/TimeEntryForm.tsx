@@ -1,17 +1,54 @@
-import { Button, Card } from '@blueprintjs/core';
+import { Button, Card, Switch } from '@blueprintjs/core';
 import { Field, Form, Formik } from 'formik';
 import * as React from 'react';
 import * as Yup from 'yup';
 
-import { IUserProps } from '../AuthRequired';
 import MyDateInput from '../Components/Form/MyDateInput';
 import TimeTagSelector from '../Components/Form/TimeTagSelector';
 import TimeToggle from '../Components/Form/TimeToggle';
 
 
 
-class TimeEntryForm extends React.Component<ITimeLogProps> {
+
+class TimeEntryForm extends React.Component<ITimeLogProps, { isEnterRange: boolean}> {
+    public constructor(props: ITimeLogProps){
+        super(props);
+        this.state = { isEnterRange: false };
+    }
     public renderFormComponents(titleError: any, textError: any, dateError: any, startTimeError: any, endTimeError: any) {
+        let rangeFields = (
+            <div>
+                <div style={{display: 'inline-flex', flexDirection: 'column'}}>
+                   <p style={{padding: 1, margin: 1}}className="pt-ui-text">Start Time</p> 
+                    <Field 
+                        name="timeLog.startTime" 
+                        render={({ field }:{ field: any } ) => (
+                            <TimeToggle {...field} />
+                        )}
+                        /> 
+                    <p className="pt-form-helper-text">{startTimeError}</p>
+                </div>
+                <div style={{display: 'inline-flex', flexDirection: 'column'}}>
+                   <p style={{padding: 1, margin: 1}}>End Time</p>
+                    <Field 
+                        name="timeLog.endTime" 
+                        render={({ field }:{ field: any } ) => (
+                            <TimeToggle {...field} />
+                        )}
+                        /> 
+                    <p className="pt-form-helper-text">{endTimeError}</p>
+                </div>
+            </div>
+        );
+        if(!this.state.isEnterRange) {
+            rangeFields = (
+                <Field 
+                className={`pt-input pt-fill ${(titleError) ? "pt-intent-danger" : ""}`}
+                name="timeLog.totalTime" 
+                placeholder="Total Time"
+                /> 
+            )
+        }
     return (
        <Form>
            <Card>
@@ -35,26 +72,8 @@ class TimeEntryForm extends React.Component<ITimeLogProps> {
                     )}
                     /> 
                 <p>{dateError}</p>
-                <div style={{display: 'inline-flex', flexDirection: 'column'}}>
-                   <p style={{padding: 1, margin: 1}}className="pt-ui-text">Start Time</p> 
-                    <Field 
-                        name="timeLog.startTime" 
-                        render={({ field }:{ field: any } ) => (
-                            <TimeToggle {...field} />
-                        )}
-                        /> 
-                    <p className="pt-form-helper-text">{startTimeError}</p>
-                </div>
-                <div style={{display: 'inline-flex', flexDirection: 'column'}}>
-                   <p style={{padding: 1, margin: 1}}>End Time</p>
-                    <Field 
-                        name="timeLog.endTime" 
-                        render={({ field }:{ field: any } ) => (
-                            <TimeToggle {...field} />
-                        )}
-                        /> 
-                    <p className="pt-form-helper-text">{endTimeError}</p>
-                </div>
+                <Switch checked={this.state.isEnterRange} label="Enter range" onChange={() =>  this.setState({ isEnterRange: !this.state.isEnterRange })} />
+                    {rangeFields}
                 <div>
                     <Field
                         name="timeLog.timeTagId"
@@ -78,6 +97,7 @@ class TimeEntryForm extends React.Component<ITimeLogProps> {
                         date: new Date(),
                         endTime: new Date(),
                         startTime: new Date(),
+                        totalTime: 0,
                         text: '',
                         timeTagId: '',
                         title: '',
@@ -86,18 +106,11 @@ class TimeEntryForm extends React.Component<ITimeLogProps> {
                 validationSchema={schema}
                 onSubmit={values => {
                     const { timeLog } = values;
-                    const { startTime, endTime, date } = values.timeLog;
-                    const formatTime = (currentDate: Date, time: Date):Date => {
-                        const newDate = new Date(currentDate);
-                        newDate.setSeconds(time.getSeconds());
-                        newDate.setMinutes(time.getMinutes());
-                        newDate.setHours(time.getHours());
-                        return newDate;
-                    }
-                    timeLog.startTime = formatTime(date, startTime);
-                    timeLog.endTime = formatTime(date, endTime); 
-                    if (timeLog.startTime > timeLog.endTime){
-                        timeLog.endTime.setDate(timeLog.endTime.getDate() + 1);
+                    if (this.state.isEnterRange){
+                        delete timeLog.totalTime
+                    } else {
+                        delete timeLog.startTime;
+                        delete timeLog.endTime;
                     }
                     this.props.submit(timeLog)
                 }}
@@ -116,16 +129,16 @@ class TimeEntryForm extends React.Component<ITimeLogProps> {
  
 
 
-interface ITimeLogProps extends IUserProps{ 
-    submit(model: {title: string, text: string, startTime: Date, endTime: Date, timeTagId: string}): void;
+interface ITimeLogProps { 
+    submit(model: {title: string, text: string, totalTime: number, date: Date, startTime: Date, endTime: Date, timeTagId: string}): void;
 }
 const schema = Yup.object().shape({
         timeLog: Yup.object().shape({
             date: Yup.date()
             .required('Required'),
-            endTime: Yup.date().required('Required'),
-            startTime: Yup.date()
-                .required('Required'),
+            endTime: Yup.date(),
+            startTime: Yup.date(),
+            totalTime: Yup.number().integer('Must Be an integer'),
             text: Yup.string(),
             timeTagId: Yup.string(),
             title: Yup.string()
