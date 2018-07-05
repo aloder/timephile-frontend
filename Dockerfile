@@ -17,4 +17,4 @@ RUN yarn install --frozen-lockfile
 COPY . .
 
 # Build for production.
-RUN npm run build --production
+RUN yarn run build --production
