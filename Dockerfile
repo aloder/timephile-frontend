@@ -9,5 +9,8 @@ ADD yarn.lock /usr/src/app/yarn.lock
 RUN yarn install --frozen-lockfile
 COPY . /usr/src/app
 RUN yarn build
-RUN yarn global add serve
+
+FROM node:10.4.1
+RUN npm install -g serve
 CMD ["serve", "-p 80" "./build/"]
+EXPOSE 80
