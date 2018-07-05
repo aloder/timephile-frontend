@@ -9,12 +9,5 @@ ADD yarn.lock /usr/src/app/yarn.lock
 RUN yarn install --frozen-lockfile
 COPY . /usr/src/app
 RUN yarn build
-
-
-# production environment
-FROM nginx:1.13.9-alpine
-RUN rm -rf /etc/nginx/conf.d
-COPY nginx/default.conf /etc/nginx/default.conf
-COPY --from=builder /usr/src/app/build /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+RUN yarn global add serve
+CMD ["serve", "-p 80" "./build/"]
