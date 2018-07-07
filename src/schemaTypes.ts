@@ -61,6 +61,22 @@ export interface signupVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: verifyEmail
+// ====================================================
+
+export interface verifyEmail {
+  verifyEmail: boolean | null;
+}
+
+export interface verifyEmailVariables {
+  link: string;
+}
+
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: createTimeLog
 // ====================================================
 
@@ -170,6 +186,7 @@ export interface DeleteTimeLogVariables {
 export interface createTimeTag_createTimeTag {
   id: string;
   name: string;
+  color: string;
   description: string | null;
 }
 
@@ -180,6 +197,7 @@ export interface createTimeTag {
 export interface createTimeTagVariables {
   name: string;
   description: string;
+  color: string;
 }
 
 
@@ -211,6 +229,7 @@ export interface me {
 export interface timeLogs_timeLogs_tags {
   id: string;
   name: string;
+  color: string;
   description: string | null;
 }
 
@@ -246,6 +265,7 @@ export interface timeLogsVariables {
 export interface timeLogsRange_timeLogsRange_tags {
   id: string;
   name: string;
+  color: string;
   description: string | null;
 }
 
@@ -283,6 +303,7 @@ export interface timeLogsRangeVariables {
 export interface timeTags_timeTags {
   id: string;
   name: string;
+  color: string;
   description: string | null;
 }
 

@@ -16,6 +16,7 @@ class App extends React.Component<ICircleProps, IArc> {
     thumbColor: 'white',
     thumbBorderWidth: 5,
     thumbBorderColor: '#cccccc',
+    clickable: false,
     onChange: (value: any) => undefined
   }
   
@@ -47,6 +48,9 @@ class App extends React.Component<ICircleProps, IArc> {
     }
   }
   private trackSelect = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!(this.props as PropsWithDefaults).clickable){
+      return;
+    }
     const index = this.makeArc(event);
     if (index) {
       document.addEventListener('mousemove', (ev) => this.moveArc(ev, index))
@@ -54,6 +58,9 @@ class App extends React.Component<ICircleProps, IArc> {
   }
 
   private handleSelect = (event: React.MouseEvent<HTMLDivElement>, index: number, angle: number) => {
+    if (!(this.props as PropsWithDefaults).clickable){
+      return;
+    }
     this.trackLeave()
     document.addEventListener('mousemove', (ev) => this.moveArc(ev, index))
     this.setState({currentArcIndex: index, currentAngle: angle})
@@ -184,6 +191,7 @@ class App extends React.Component<ICircleProps, IArc> {
             handleSelect={(event: any) => this.handleSelect(event, index, 0)}
             rotate={arc.angles[0]}
             position={this.calculateThumbPosition(arc.angles[0])}
+            show={(this.props as PropsWithDefaults).clickable}
           />);
       ret.push(<Thumb
             diameter={trackWidth}
@@ -194,6 +202,7 @@ class App extends React.Component<ICircleProps, IArc> {
             borderColor={'gray'}
             rotate={arc.angles[1]}
             position={this.calculateThumbPosition(arc.angles[1])}
+            show={(this.props as PropsWithDefaults).clickable}
           />)
 
     }
@@ -234,6 +243,7 @@ interface ICircleProps {
   thumbColor?: string;
   thumbBorderWidth?: number;
   thumbBorderColor?: string;
+  clickable?:boolean;
   onChange?(event: any): any;
 }
 
@@ -245,6 +255,7 @@ interface ICircleDefaultProps {
   arcColor: string;
   thumbWidth: number;
   thumbColor: string;
+  clickable: boolean;
   thumbBorderWidth: number;
   thumbBorderColor: string;
   onChange(event: any): any;

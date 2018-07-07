@@ -1,10 +1,11 @@
-import { Button, Intent, Switch, Tag } from '@blueprintjs/core';
+import { Button, ButtonGroup, Intent, Switch, Tag } from '@blueprintjs/core';
 import { Field, Form, FormikProps, withFormik } from 'formik';
 import * as React from 'react';
 
 import { timeLogs_timeLogs_tags, timeLogsRange_timeLogsRange, UpdateTimeLogVariables } from '../../schemaTypes';
 import { MyEditableText } from '../Form/MyEditableText';
 import { MyTimePicker } from '../Form/MyTimePicker';
+import TimeTagSelectorSuguestion from '../Form/TimeTagSelectorSugestion';
 
 
 interface IProps extends timeLogsRange_timeLogsRange{
@@ -25,31 +26,17 @@ class C extends
 React.PureComponent<FormikProps<IFormValues> & IProps, { isRange: boolean }>{
     public constructor(props: FormikProps<IFormValues> & IProps){
         super(props);
-        this.state = { isRange:  props.startTime && props.endTime }
+        this.state = { isRange:  props.startTime != null && props.endTime != null }
     }
     public render(){
         const { tags } = this.props;
-        let headerState = (
-            <h3>
-                <Field name="totalTime" component={MyEditableText} minWidth={40} placeholder={"Time..."}/> 
-                Minutes
-            </h3>
-            );
         let dif:boolean = false;
-        const comp = ["id", "title", "text", "date", "startTime", "endTime", "totatlTime"];
+        const comp = ["id", "title", "text", "date", "startTime", "endTime", "totalTime"];
         for (const field of comp){
             dif = dif || this.props.values[field] !== this.props.initialValues[field]
         }
-        if (this.state.isRange){
-            headerState = (
-                <h3>
-                    <Field name="startTime" component={MyTimePicker} placeholder={"Time..."}/> 
-                    -
-                    <Field name="endTime" component={MyTimePicker} placeholder={"Time..."}/> 
-                </h3>
-            );
-        }
         const tagBubbles:Array<React.ReactElement<React.StatelessComponent>> = []
+        tagBubbles.push(AddTagBubble())
         if (tags != null){
             for(const tag of tags){
             tagBubbles.push(TagBubble(tag!));
@@ -58,8 +45,26 @@ React.PureComponent<FormikProps<IFormValues> & IProps, { isRange: boolean }>{
         return(
             <Form>
                 <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-                    {headerState}
-                    <span>
+                    <h3 hidden={this.state.isRange}>
+                        <Field 
+                            name="totalTime" 
+                            component={MyEditableText} 
+                            minWidth={40} 
+                            placeholder={"Time..."}/> 
+                        <span style={{fontSize: 12}}>mins</span>
+                    </h3>
+                    <h3 hidden={!this.state.isRange}>
+                        <Field 
+                            name="startTime" 
+                            component={MyTimePicker} 
+                            placeholder={"Time..."}/> 
+                        -
+                        <Field 
+                            name="endTime" 
+                            component={MyTimePicker} 
+                            placeholder={"Time..."}/> 
+                    </h3>
+                    <span style={{display: 'inline-flex', alignItems: 'center'}}>
                         {tagBubbles} 
                         <div style={{display: 'inline-flex'}} >
                             <Button 
@@ -67,38 +72,72 @@ React.PureComponent<FormikProps<IFormValues> & IProps, { isRange: boolean }>{
                                 minimal={true} 
                                 icon="remove" 
                                 className="pt-button pt-intent-danger"
-                                onClick={() => this.props.delete({ id: this.props.id})} />
+                                onClick={() => 
+                                    this.props.delete({ id: this.props.id})} 
+                            />
                         </div>
                     </span>
 
                 </div>
-                <Switch style={{ float: 'right' }}checked={this.state.isRange} label="Enter range" onChange={() => this.setState({ isRange: !this.state.isRange })} />
+                <Switch 
+                    style={{ float: 'right' }} 
+                    checked={this.state.isRange} 
+                    label="Enter range" 
+                    onChange={() => 
+                        this.setState({ isRange: !this.state.isRange })} />
                 <h3>
                     <Field
                         name="title"
+                        placeholder={"Title..."}
                         component={MyEditableText}
                     />
                 </h3>
-                <div>
+                <div style={{ paddingLeft: 10}}>
                     <Field
                         name="text"
                         multiline={true}
-                        placeholder={"Click To Add Text"}
+                        placeholder={"Description..."}
                         component={MyEditableText}
                     />
                 </div>
-                {dif ?(
-                    <Button type="submit" >Submit</Button>
-                    ):( null
-                        
-                    )}
+                <ButtonGroup hidden={!dif} fill={dif} style={{padding: 10}}>
+                    <Button 
+                        intent={Intent.SUCCESS} 
+                        type="submit" >
+                        Submit
+                    </Button>
+                    <Button 
+                        intent={Intent.DANGER} 
+                        type="cancel"
+                        onClick={() => this.props.resetForm()}
+                    > 
+                        Cancel
+                    </Button>
+                </ButtonGroup>
             </Form>
         );
     }
 }
 
 const TagBubble = (tag:timeLogs_timeLogs_tags) => (
-  <Tag intent={Intent.PRIMARY} key={tag.id}> {tag.name}</Tag>
+  <Tag 
+    style={{backgroundColor:`${tag.color}`}} 
+    key={tag.id}
+    onRemove={
+        (event) => console.warn(`remove ${event.currentTarget.accessKey}`)}
+    > 
+    {tag.name}
+  </Tag>
+)
+const AddTagBubble = () => (
+    <Tag
+        intent={Intent.SUCCESS}
+        interactive={true}
+        style={{fontSize: 12}}
+    >
+        <TimeTagSelectorSuguestion />
+        {/* <span className="pt-icon-add"/> Add */}
+    </Tag>
 )
 export const EditCardView = withFormik<IProps, IFormValues>({
     mapPropsToValues: (props) => ({

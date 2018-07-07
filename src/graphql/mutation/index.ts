@@ -26,7 +26,12 @@ export const SIGN_UP = gql`
     }
   }
 `;
+export const VERIFY_EMAIL = gql`
+  mutation verifyEmail($link: String!){
+    verifyEmail(link: $link)
+  }
 
+`;
 export const CREATE_TIME_LOG = gql`
   mutation createTimeLog($title: String!, $text: String, $date: DateTime, $startTime: DateTime, $endTime: DateTime, $totalTime: Int, $tagIds: [ID!]){
     createTimeLog(title: $title, text: $text, date: $date, startTime: $startTime, endTime: $endTime, totalTime: $totalTime, tagIds: $tagIds){
@@ -42,6 +47,7 @@ export const CREATE_TIME_LOG = gql`
       tags{
         id
         name
+        color
         description
       }
     }
@@ -62,6 +68,7 @@ export const UPDATE_TIME_LOG = gql`
       tags{
         id
         name
+        color
         description
       }
     }
@@ -76,10 +83,11 @@ export const DELETE_TIME_LOG = gql`
   }
 `
 export const CREATE_TIME_TAG = gql`
-    mutation createTimeTag($name: String!, $description: String!){
-        createTimeTag(name: $name, description: $description){
+    mutation createTimeTag($name: String!, $description: String!, $color: String!){
+        createTimeTag(name: $name, description: $description, color: $color){
             id
             name
+            color
             description
         }
     }

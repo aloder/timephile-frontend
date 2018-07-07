@@ -25,6 +25,7 @@ FieldProps<any> & { prefix: React.ReactNode, style: React.CSSProperties }
         {...rest}
         {...props}
         className={`${(errorMsg) ? "pt-danger" : ""}`}
+        style={{width: '60px'}}
         showSecond={false}
         use12Hours={true}
         minuteStep={5}

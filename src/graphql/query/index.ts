@@ -24,6 +24,7 @@ export const TIME_LOGS = gql`
          tags {
              id
              name
+             color
              description
          }
      }
@@ -45,6 +46,7 @@ export const TIME_LOGS_RANGE = gql`
          tags {
              id
              name
+             color
              description
          }
      }
@@ -56,6 +58,7 @@ export const TIME_TAGS = gql`
         timeTags(userId: $userId){
             id
             name
+            color
             description
         }
     }

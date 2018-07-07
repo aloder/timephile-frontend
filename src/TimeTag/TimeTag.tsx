@@ -19,7 +19,7 @@ class TimeTag extends React.Component<IUserProps> {
 }
 
 const submit = (
-    model : { name: string, description: string }, 
+    model : { name: string, description: string, color: string }, 
     timeTag: MutationFn<any, OperationVariables>
     ) => {
         timeTag({

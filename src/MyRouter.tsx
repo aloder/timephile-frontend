@@ -6,6 +6,8 @@ import SliderPage from './Components/CircleSlider/SliderPage';
 import Home from './Home';
 import Login from './Login/Login';
 import NavBar from './NavBar';
+import Confirm from './Other/Confirm';
+import ResetPassword from './Other/ResetPassword';
 import Signup from './Signup/Signup';
 
 class MyRouter extends React.Component {
@@ -17,6 +19,8 @@ class MyRouter extends React.Component {
             <Route exact={true} path="/circle"  component={SliderPage}/>
             <Route exact={true} path="/login"  component={Login}/>
             <Route exact={true} path="/signup"  component={Signup}/>
+            <Route exact={true} path="/confirm/:link"  component={Confirm}/>
+            <Route exact={true} path="/resetpassword/:link"  component={ResetPassword}/>
             <Route exact={true} path="/" render={(props) => (
               <AuthRequired>
                 <Home />

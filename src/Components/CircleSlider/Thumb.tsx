@@ -46,7 +46,7 @@ class Thumb extends React.Component<IThumbProps,{ isHovering: boolean }> {
           borderWidth={borderWidth}
           borderColor={borderColor}
           rotate={rotate}
-          show={this.state.isHovering}
+          show={this.state.isHovering && this.props.show}
         />
         <div
           style={
@@ -75,6 +75,7 @@ interface IThumbProps{
   position?: any;
   handleSelect?: any;
   rotate: number;
+  show: boolean;
 }
 
 
