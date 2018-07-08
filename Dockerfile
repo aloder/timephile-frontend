@@ -1,20 +1,12 @@
 FROM node:10.4.1 as builder
 
-# Override the base log level (info).
-ENV NPM_CONFIG_LOGLEVEL warn
+WORKDIR /usr/src/app
+COPY package.json yarn.lock ./
+RUN yarn
+COPY . ./
+RUN yarn build
 
-# Install and configure `serve`.
-RUN npm install -g serve
-CMD serve -p 80 -s build
+FROM nginx:1.12-alpine
+COPY --from=build-deps /usr/src/app/build /usr/share/nginx/html
 EXPOSE 80
-
-# Install all dependencies of the current project.
-COPY package.json package.json
-COPY yarn.lock yarn.lock
-RUN yarn install --frozen-lockfile
-
-# Copy all local files into the image.
-COPY . .
-
-# Build for production.
-RUN yarn run build --production
+CMD ["nginx", "-g", "daemon off;"]
