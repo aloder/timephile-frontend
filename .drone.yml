@@ -1,11 +1,6 @@
 pipeline:
 
-  docker:
-    image: plugins/docker
-    repo: aloder/timephile-frontend
-    tags: latest
-    secrets: [ docker_username, docker_password ]
-    
+
   deploy:
     rancher-dev:
       image: peloton/drone-rancher
