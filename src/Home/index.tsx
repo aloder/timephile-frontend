@@ -5,13 +5,11 @@ import { Query } from "react-apollo";
 import { IUserProps } from "../AuthRequired";
 import CircularSlider, { IArcObj } from "../Components/CircleSlider";
 import MyDatePicker from "../Components/Form/MyDatePicker";
-import TimeTagSelectorSuguestion from "../Components/Form/TimeTagSelectorSugestion";
 import UpdateTimeCardController from "../Components/TimeCard/updateTimeCardController";
 import { TIME_LOGS_RANGE } from "../graphql/query";
 import { timeLogsRange, timeLogsRangeVariables } from "../schemaTypes";
 import { TimeEntryFunction } from "../TimeEntry/TimeEntryFunct";
 import TimeTag from "../TimeTag/TimeTag";
-// import MyTable from './MyTable';
 
 class Home extends React.Component<IUserProps, IIndexState> {
   public constructor(props: any) {
@@ -138,7 +136,6 @@ class Home extends React.Component<IUserProps, IIndexState> {
                     </TimeEntryFunction>
 
                     {timeCards}
-                    <TimeTagSelectorSuguestion />
                   </Card>
                 </div>
               );

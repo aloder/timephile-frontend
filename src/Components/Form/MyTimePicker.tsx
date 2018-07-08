@@ -20,7 +20,7 @@ FieldProps<any> & { prefix: React.ReactNode, style: React.CSSProperties }
   return (
       <TimePicker 
         onChange={(value2: any) => onChange(ValueToFormik(new Date(value2), field.name))}
-        value={(value) ? Moment(value): Moment()}
+        value={(value) ? Moment(value): Moment('12:00 pm', "hh:mm a")}
         defaultValue={Moment(value)}
         {...rest}
         {...props}

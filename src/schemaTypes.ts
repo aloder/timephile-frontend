@@ -83,6 +83,7 @@ export interface verifyEmailVariables {
 export interface createTimeLog_createTimeLog_tags {
   id: string;
   name: string;
+  color: string;
   description: string | null;
 }
 
@@ -124,6 +125,7 @@ export interface createTimeLogVariables {
 export interface UpdateTimeLog_updateTimeLog_tags {
   id: string;
   name: string;
+  color: string;
   description: string | null;
 }
 
@@ -152,6 +154,8 @@ export interface UpdateTimeLogVariables {
   startTime?: any | null;
   endTime?: any | null;
   totalTime?: number | null;
+  removeTagIds: string[];
+  addTagIds: string[];
 }
 
 
