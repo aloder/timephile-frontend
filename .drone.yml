@@ -1,27 +1,31 @@
 pipeline:
 
+  docker:
+    image: plugins/docker
+    repo: aloder/timephile-frontend
+    tags: latest
+    secrets: [ docker_username, docker_password ]
+    
+  rancher-dev:
+    image: peloton/drone-rancher
+    url: https://rancher.andrewloder.com
+    service: timephile-frontend/dev
+    docker_image: aloder/timephile-frontend
+    start_first: false
+    confirm: true
+    timeout: 180
+    secrets: [ rancher_access_key, rancher_secret_key]
+    when:
+      branch: dev
 
-  deploy:
-    rancher-dev:
-      image: peloton/drone-rancher
-      url: https://rancher.andrewloder.com
-      service: timephile-frontend/dev
-      docker_image: aloder/timephile-frontend
-      start_first: false
-      confirm: true
-      timeout: 180
-      secrets: [ rancher_access_key, rancher_secret_key]
-      when:
-        branch: dev
-
-    rancher-prod:
-      image: peloton/drone-rancher
-      url: https://rancher.andrewloder.com
-      service: timephile-frontend/prod
-      docker_image: aloder/timephile-frontend
-      start_first: false
-      confirm: true
-      timeout: 180
-      secrets: [ rancher_access_key, rancher_secret_key]
-      when:
-        branch: master
+  rancher-prod:
+    image: peloton/drone-rancher
+    url: https://rancher.andrewloder.com
+    service: timephile-frontend/prod
+    docker_image: aloder/timephile-frontend
+    start_first: false
+    confirm: true
+    timeout: 180
+    secrets: [ rancher_access_key, rancher_secret_key]
+    when:
+      branch: master
