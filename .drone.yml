@@ -8,7 +8,7 @@ pipeline:
     
   rancher-dev:
     image: peloton/drone-rancher
-    url: https://rancher.andrewloder.com
+    url: https://rancher.andrewloder.com/v3
     service: timephile-frontend/dev
     docker_image: aloder/timephile-frontend
     start_first: false
@@ -20,7 +20,7 @@ pipeline:
 
   rancher-prod:
     image: peloton/drone-rancher
-    url: https://rancher.andrewloder.com
+    url: https://rancher.andrewloder.com/v3
     service: timephile-frontend/prod
     docker_image: aloder/timephile-frontend
     start_first: false
