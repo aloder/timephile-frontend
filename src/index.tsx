@@ -38,7 +38,7 @@ const client = new ApolloClient({
     }),
     new HttpLink({
       credentials: 'same-origin',
-      uri: 'http://localhost:4000',
+      uri: `${process.env.BACKEND_URI}`,
     }),
   ])
 });
