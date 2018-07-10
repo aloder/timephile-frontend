@@ -29,7 +29,7 @@ const renderFormComponents = (
           <p className="pt-form-helper-text">{passwordError}</p>
           <Button type="submit">Submit</Button>
           <div className="pt-form-helper-text">
-            {error ? error.graphQLErrors[0].message : ""}
+            {error ? error.graphQLErrors[0] : ""}
           </div>
         </Form>
       </Card>

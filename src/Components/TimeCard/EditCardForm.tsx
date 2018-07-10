@@ -9,7 +9,7 @@ import {
 } from "../../schemaTypes";
 import AddTimeTagTag from "../Form/AddTimeTagTag";
 import { MyEditableText } from "../Form/MyEditableText";
-import { MyTimePicker } from "../Form/MyTimePicker";
+import { MyTimePicker } from "../Form/Time/MyTimePicker";
 
 interface IProps extends timeLogsRange_timeLogsRange {
   submit(values: UpdateTimeLogVariables): void;
@@ -96,22 +96,26 @@ class EditCardDisplay extends React.PureComponent<
             </div>
           </span>
         </div>
-        <Switch
-          style={{ float: "right" }}
-          checked={this.state.isRange}
-          label="Enter range"
-          onChange={() =>{
-						this.props.setFieldValue("totalTime", null); 
-						this.setState({ isRange: !this.state.isRange })
-					}}
-        />
-        <h3>
-          <Field
-            name="title"
-            placeholder={"Title..."}
-            component={MyEditableText}
+        <div style={{ display: 'flex', justifyContent: 'space-between'}}>
+          <h3>
+            <Field
+              name="title"
+              multiline={true}
+              placeholder={"Title..."}
+              component={MyEditableText}
+            />
+          </h3>
+          <Switch
+            style={{ float: "right" }}
+            checked={this.state.isRange}
+            label="Enter range"
+            onChange={() =>{
+              this.props.setFieldValue("totalTime", null); 
+              this.setState({ isRange: !this.state.isRange })
+            }}
           />
-        </h3>
+
+        </div>
         <div style={{ paddingLeft: 10 }}>
           <Field
             name="text"

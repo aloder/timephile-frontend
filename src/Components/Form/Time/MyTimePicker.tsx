@@ -5,7 +5,7 @@ import * as Moment from 'moment';
 import TimePicker from 'rc-time-picker';
 import * as React from 'react';
 
-import { ValueToFormik } from './Shared';
+import { ValueToFormik } from '../Shared';
 
 
 export const MyTimePicker: React.SFC<

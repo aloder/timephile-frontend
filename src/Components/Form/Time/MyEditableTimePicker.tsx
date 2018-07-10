@@ -1,7 +1,7 @@
 import { EditableText, Intent } from '@blueprintjs/core';
 import { FieldProps } from 'formik';
 import * as React from 'react';
-import { ValueToFormik } from './Shared';
+import { ValueToFormik } from '../Shared';
 
 
 export const MyEditableTimePicker: React.SFC<

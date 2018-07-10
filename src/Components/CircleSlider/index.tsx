@@ -5,7 +5,7 @@ import Thumb from './Thumb';
 import Track from './Track';
 import { getRelativeAngle, pipe, toDeg, toRad } from './utils';
 
-class App extends React.Component<ICircleProps, IArc> {
+class CircleSlider extends React.Component<ICircleProps, IArc> {
   public static defaultProps: ICircleDefaultProps= {
     r: 200,
     initialAngle: 0,
@@ -274,4 +274,4 @@ export interface IArcObj {
 }
 type PropsWithDefaults = ICircleProps & ICircleDefaultProps;
 
-export default App;
+export default CircleSlider;

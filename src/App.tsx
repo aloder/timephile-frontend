@@ -11,9 +11,7 @@ import MyRouter from './MyRouter';
 class App extends React.Component {
   public render() {
     return (
-      <div>
         <MyRouter />
-      </div>
     );
   }
 }

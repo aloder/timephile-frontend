@@ -1,14 +1,14 @@
 import * as React from "react";
 import { ChildMutateProps, graphql } from "react-apollo";
 
-import { CREATE_TIME_LOG } from "../graphql/mutation";
-import { TIME_LOGS_RANGE } from "../graphql/query";
+import { CREATE_TIME_LOG } from "../../../graphql/mutation";
+import { TIME_LOGS_RANGE } from "../../../graphql/query";
 import {
   createTimeLog,
   createTimeLogVariables,
   timeLogsRange,
   timeLogsRangeVariables
-} from "../schemaTypes";
+} from "../../../schemaTypes";
 
 class C extends React.PureComponent<
   ChildMutateProps<ITimeEntryProps, createTimeLog, createTimeLogVariables>
@@ -43,7 +43,6 @@ class C extends React.PureComponent<
 }
 
 interface ITimeEntryProps {
-  query: any;
   variables: timeLogsRangeVariables;
   children: (
     data: {
@@ -51,7 +50,7 @@ interface ITimeEntryProps {
     }
   ) => JSX.Element | null;
 }
-export const TimeEntryFunction = graphql<
+export default graphql<
   ITimeEntryProps,
   createTimeLog,
   createTimeLogVariables

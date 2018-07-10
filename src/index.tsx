@@ -19,7 +19,6 @@ const auth = new ApolloLink((operation, forward) => {
   }
   return null;
 });
-
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: ApolloLink.from([
@@ -38,7 +37,7 @@ const client = new ApolloClient({
     }),
     new HttpLink({
       credentials: 'same-origin',
-      uri: `${process.env.BACKEND_URI}`,
+      uri: `http://localhost:4000`,
     }),
   ])
 });
