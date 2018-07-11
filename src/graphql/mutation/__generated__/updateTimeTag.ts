@@ -4,10 +4,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: createTimeLog
+// GraphQL mutation operation: updateTimeTag
 // ====================================================
 
-export interface createTimeLog_createTimeLog_tags {
+export interface updateTimeTag_updateTimeTag {
   id: string;
   name: string;
   color: string;
@@ -15,31 +15,16 @@ export interface createTimeLog_createTimeLog_tags {
   deleted: boolean | null;
 }
 
-export interface createTimeLog_createTimeLog {
+export interface updateTimeTag {
+  updateTimeTag: updateTimeTag_updateTimeTag | null;
+}
+
+export interface updateTimeTagVariables {
   id: string;
-  title: string;
-  text: string | null;
-  date: any | null;
-  totalTime: number | null;
-  startTime: any | null;
-  endTime: any | null;
-  isRange: boolean | null;
-  deleted: boolean | null;
-  tags: createTimeLog_createTimeLog_tags[] | null;
-}
-
-export interface createTimeLog {
-  createTimeLog: createTimeLog_createTimeLog | null;
-}
-
-export interface createTimeLogVariables {
-  title: string;
-  text?: string | null;
-  date?: any | null;
-  startTime?: any | null;
-  endTime?: any | null;
-  totalTime?: number | null;
-  tagIds?: string[] | null;
+  name?: string | null;
+  description?: string | null;
+  color?: string | null;
+  deleted?: boolean | null;
 }
 
 /* tslint:disable */

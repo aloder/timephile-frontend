@@ -12,6 +12,7 @@ export interface timeLogs_timeLogs_tags {
   name: string;
   color: string;
   description: string | null;
+  deleted: boolean | null;
 }
 
 export interface timeLogs_timeLogs {

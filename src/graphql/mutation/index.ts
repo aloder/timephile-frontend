@@ -63,6 +63,7 @@ export const CREATE_TIME_LOG = gql`
         name
         color
         description
+        deleted
       }
     }
   }
@@ -106,6 +107,7 @@ export const UPDATE_TIME_LOG = gql`
         name
         color
         description
+        deleted
       }
     }
   }
@@ -129,6 +131,24 @@ export const CREATE_TIME_TAG = gql`
       name
       color
       description
+      deleted
+    }
+  }
+`;
+export const UPDATE_TIME_TAG = gql`
+  mutation updateTimeTag(
+    $id: ID!
+    $name: String
+    $description: String
+    $color: String
+    $deleted: Boolean
+  ) {
+    updateTimeTag(id: $id, name: $name, description: $description, color: $color, deleted: $deleted) {
+      id
+      name
+      color
+      description
+      deleted
     }
   }
 `;

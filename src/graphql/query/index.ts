@@ -26,6 +26,7 @@ export const TIME_LOGS = gql`
              name
              color
              description
+             deleted
          }
      }
  }
@@ -48,6 +49,7 @@ export const TIME_LOGS_RANGE = gql`
              name
              color
              description
+             deleted
          }
      }
  }
@@ -60,6 +62,7 @@ export const TIME_TAGS = gql`
             name
             color
             description
+            deleted
         }
     }
 `

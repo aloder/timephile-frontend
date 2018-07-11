@@ -12,6 +12,7 @@ export interface createTimeTag_createTimeTag {
   name: string;
   color: string;
   description: string | null;
+  deleted: boolean | null;
 }
 
 export interface createTimeTag {
