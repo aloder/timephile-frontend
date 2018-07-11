@@ -1,4 +1,4 @@
-import { Intent, Tag } from '@blueprintjs/core';
+import { Icon, Intent, Tag } from '@blueprintjs/core';
 import { FieldProps } from 'formik';
 import * as React from 'react';
 
@@ -14,16 +14,17 @@ class AddTimeTagTag extends React.Component<
     const { field:{ name }, form:{ setFieldValue,values } } = this.props;
     return (
       <Tag
-        onClick={() => this.setState({ selected: true })}
-        onMouseLeave={() => this.setState({ selected: false })}
+        onClick={() => (!this.state.selected) ? this.setState({ selected: true }): null}
         key={"Add-Tag-Bubble"}
-        intent={Intent.SUCCESS}
+        intent={(this.state.selected)? Intent.PRIMARY : Intent.SUCCESS}
         interactive={true}
         style={{ maxWidth: 200 }}
       >
       <div hidden={!this.state.selected}>
+        <Icon icon="cross" iconSize={30} intent={Intent.NONE} onClick={() => this.setState({ selected: false})}/>
         {(this.state.selected)?
         <TimeTagSelectorSuguestion
+          ref={() => "TimeTagSelecor"}
           onAdd={tag => {
             const find = values[name].find((t:any) => t.id === tag.id);
             if (find) {
@@ -41,7 +42,7 @@ class AddTimeTagTag extends React.Component<
         />: null}
         </div>
         <div hidden={this.state.selected}>
-          <span hidden={this.state.selected} className="pt-icon-add" /> Add
+          <Icon icon="add" /> Add
         </div>
       </Tag>
     );

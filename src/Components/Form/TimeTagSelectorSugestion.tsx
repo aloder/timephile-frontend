@@ -1,13 +1,10 @@
-import { MenuItem } from "@blueprintjs/core";
-import { Suggest } from "@blueprintjs/select";
-import * as React from "react";
-import { Query } from "react-apollo";
-import { ME, TIME_TAGS } from "../../graphql/query";
-import {
-  timeTags,
-  timeTags_timeTags,
-  timeTagsVariables
-} from "../../schemaTypes";
+import { MenuItem } from '@blueprintjs/core';
+import { Suggest } from '@blueprintjs/select';
+import * as React from 'react';
+import { Query } from 'react-apollo';
+
+import { ME, TIME_TAGS } from '../../graphql/query';
+import { timeTags, timeTags_timeTags, timeTagsVariables } from '../../graphql/query/__generated__/timeTags';
 
 const TagSelect = Suggest.ofType<timeTags_timeTags>();
 

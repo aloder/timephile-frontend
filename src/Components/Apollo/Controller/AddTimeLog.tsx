@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { createTimeLog, createTimeLogVariables } from '../../../schemaTypes';
+import { createTimeLog, createTimeLogVariables } from '../../../graphql/mutation/__generated__/createTimeLog';
 import CreateTimeLogMutation from '../Mutation/CreateTimeLogMutation';
 import MeQuery from '../Query/MeQuery';
 

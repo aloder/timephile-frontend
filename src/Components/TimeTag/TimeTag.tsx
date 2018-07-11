@@ -2,12 +2,11 @@ import { OperationVariables } from 'apollo-client';
 import * as React from 'react';
 import { Mutation, MutationFn } from 'react-apollo';
 
-import { IUserProps } from '../AuthRequired';
-import { CREATE_TIME_TAG } from '../graphql/mutation';
-import { ME, TIME_TAGS } from '../graphql/query';
+import { CREATE_TIME_TAG } from '../../graphql/mutation';
+import { ME, TIME_TAGS } from '../../graphql/query';
 import TimeEntryForm from './TimeTagForm';
 
-class TimeTag extends React.Component<IUserProps> {
+class TimeTag extends React.Component {
     public render() {
         return (
             <Mutation mutation={CREATE_TIME_TAG}>

@@ -1,14 +1,11 @@
-import * as React from "react";
-import { Mutation, MutationFn } from "react-apollo";
-import { DELETE_TIME_LOG, UPDATE_TIME_LOG } from "../../graphql/mutation";
-import {
-  DeleteTimeLog,
-  DeleteTimeLogVariables,
-  timeLogs_timeLogs,
-  UpdateTimeLog,
-  UpdateTimeLogVariables
-} from "../../schemaTypes";
-import { EditCardView } from "./EditCardForm";
+import * as React from 'react';
+import { Mutation, MutationFn } from 'react-apollo';
+
+import { DELETE_TIME_LOG, UPDATE_TIME_LOG } from '../../graphql/mutation';
+import { DeleteTimeLog, DeleteTimeLogVariables } from '../../graphql/mutation/__generated__/DeleteTimeLog';
+import { UpdateTimeLog, UpdateTimeLogVariables } from '../../graphql/mutation/__generated__/UpdateTimeLog';
+import { timeLogs_timeLogs } from '../../graphql/query/__generated__/timeLogs';
+import { EditCardView } from './EditCardForm';
 
 class UpdateTimeForm extends React.PureComponent<timeLogs_timeLogs> {
   private submit = async (

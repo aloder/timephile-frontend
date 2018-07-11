@@ -20,12 +20,14 @@ FieldProps<any> & { prefix: React.ReactNode, style: React.CSSProperties }
   return (
       <TimePicker 
         onChange={(value2: any) => onChange(ValueToFormik(new Date(value2), field.name))}
-        value={(value) ? Moment(value): Moment('12:00 pm', "hh:mm a")}
-        defaultValue={Moment(value)}
+        value={(value) ? Moment(value): null} 
+        defaultOpenValue={Moment('6:00 pm', "hh:mm a")}
         {...rest}
         {...props}
         className={`${(errorMsg) ? "pt-danger" : ""}`}
-        style={{width: '60px'}}
+        autoComplete="off"
+        
+        style={{width: '70px'}}
         showSecond={false}
         use12Hours={true}
         minuteStep={5}

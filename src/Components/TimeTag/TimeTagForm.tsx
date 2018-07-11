@@ -2,8 +2,8 @@ import { Button, Card } from "@blueprintjs/core";
 import { Field, Form, Formik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";
+import { MyColorSlider } from "../Form/MyColorSlider";
 
-import { MyColorSlider } from "../Components/Form/MyColorSlider";
 
 const renderFormComponents = (nameError: any, descriptionError: any) => {
   return (

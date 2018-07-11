@@ -1,8 +1,9 @@
-import * as React from "react";
-import { TIME_LOGS_RANGE } from "../../../graphql/query";
-import { timeLogsRange, timeLogsRangeVariables } from "../../../schemaTypes";
-import Query from "./index";
-import MeQuery from "./MeQuery";
+import * as React from 'react';
+import Query from '.';
+import { TIME_LOGS_RANGE } from '../../../graphql/query';
+import { timeLogsRange, timeLogsRangeVariables } from '../../../graphql/query/__generated__/timeLogsRange';
+import MeQuery from './MeQuery';
+
 
 const TimeLogsRangeQuery: React.SFC<ITimeLogsRangeQueryProps> = ({
   startDate,

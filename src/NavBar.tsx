@@ -1,9 +1,9 @@
-import { Alignment, AnchorButton, Navbar } from "@blueprintjs/core";
-import { ME } from "./graphql/query/";
-
+import { Alignment, AnchorButton, Icon, Navbar } from "@blueprintjs/core";
 import * as React from "react";
 import { Query } from "react-apollo";
-import { logout } from "./index";
+
+import { logout } from ".";
+import { ME } from "./graphql/query/";
 
 class Nav extends React.Component {
   public componentDidMount() {
@@ -11,10 +11,15 @@ class Nav extends React.Component {
   }
   public render() {
     return (
-      <Navbar className="pt-dark" style={{height: 50}}>
+      <Navbar className="bp3-navbar bp3-dark" style={{ height: 50 }}>
         <Navbar.Group align={Alignment.LEFT}>
-          <Navbar.Heading>
-            <span className="pt-icon-time" /> Timephile
+          <Navbar.Heading style={{ display: "flex", alignItems: "flex-end" }}>
+            <Icon
+              icon="time"
+              iconSize={20}
+              style={{ marginTop: 1, marginRight: 10 }}
+            />{" "}
+            Timephile
           </Navbar.Heading>
         </Navbar.Group>
         <Navbar.Group align={Alignment.RIGHT}>

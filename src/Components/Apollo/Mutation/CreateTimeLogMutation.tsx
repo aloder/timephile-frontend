@@ -1,14 +1,11 @@
-import * as React from "react";
-import { ChildMutateProps, graphql } from "react-apollo";
+import * as React from 'react';
+import { ChildMutateProps, graphql } from 'react-apollo';
 
-import { CREATE_TIME_LOG } from "../../../graphql/mutation";
-import { TIME_LOGS_RANGE } from "../../../graphql/query";
-import {
-  createTimeLog,
-  createTimeLogVariables,
-  timeLogsRange,
-  timeLogsRangeVariables
-} from "../../../schemaTypes";
+import { CREATE_TIME_LOG } from '../../../graphql/mutation';
+import { createTimeLog, createTimeLogVariables } from '../../../graphql/mutation/__generated__/createTimeLog';
+import { TIME_LOGS_RANGE } from '../../../graphql/query';
+import { timeLogsRange, timeLogsRangeVariables } from '../../../graphql/query/__generated__/timeLogsRange';
+
 
 class C extends React.PureComponent<
   ChildMutateProps<ITimeEntryProps, createTimeLog, createTimeLogVariables>

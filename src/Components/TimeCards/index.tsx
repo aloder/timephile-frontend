@@ -1,7 +1,7 @@
-import { Card } from '@blueprintjs/core';
+import { Card, Elevation } from '@blueprintjs/core';
 import * as React from 'react';
 
-import { timeLogsRange } from '../../schemaTypes';
+import { timeLogsRange } from '../../graphql/query/__generated__/timeLogsRange';
 import { IArcObj } from '../CircleSlider';
 import UpdateTimeForm from '../TimeCard';
 
@@ -22,6 +22,7 @@ const TimeCards: React.SFC<{ data: timeLogsRange }> = ({ data }) => {
         <Card
           style={{ padding: 3, paddingLeft: 10, margin: 2 }}
           key={`card ${r!.id}`}
+          elevation={Elevation.ONE}
         >
           <UpdateTimeForm key={r.id} {...r} />
         </Card>

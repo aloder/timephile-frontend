@@ -1,8 +1,8 @@
 import * as React from 'react';
 
+import Query from '.';
 import { ME } from '../../../graphql/query';
-import { me, me_me } from '../../../schemaTypes';
-import Query from './index';
+import { me, me_me } from '../../../graphql/query/__generated__/me';
 
 
 const MeQuery:React.SFC<{ children(me: me_me): React.ReactNode}> = ({ children }) => {

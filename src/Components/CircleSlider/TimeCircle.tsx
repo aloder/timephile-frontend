@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import CircleSlider, { IArcObj } from ".";
-import { timeLogsRange } from "../../schemaTypes";
+import { timeLogsRange } from "../../graphql/query/__generated__/timeLogsRange";
 
 class TimeCircle extends React.Component<
   { data: timeLogsRange },

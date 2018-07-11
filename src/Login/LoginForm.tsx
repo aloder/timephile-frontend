@@ -1,4 +1,4 @@
-import { Button, Card } from '@blueprintjs/core';
+import { Button, Card, Elevation } from '@blueprintjs/core';
 import { ApolloError } from 'apollo-client';
 import { Field, Form, Formik } from 'formik';
 import * as React from 'react';
@@ -11,24 +11,24 @@ const renderFormComponents = (
 ) => {
   return (
     <div style={{ display: "flex", justifyContent: "center", paddingTop: 20 }}>
-      <Card style={{ minWidth: "25%" }}>
-        <h3>Login</h3>
-        <Form className={"pt-form-group pt-intent-danger"}>
+      <Card elevation={Elevation.TWO} style={{ minWidth: "25%" }}>
+        <h2>Login</h2>
+        <Form className={"bp3-form-group bp3-intent-danger"}>
           <Field
-            className={`pt-input ${emailError ? "pt-intent-danger" : ""}`}
+            className={`bp3-input ${emailError ? "bp3-intent-danger" : ""}`}
             name="login.email"
             placeholder="Email"
           />
-          <p className="pt-form-helper-text">{emailError}</p>
+          <p className="bp3-form-helper-text">{emailError}</p>
           <Field
-            className={`pt-input ${passwordError ? "pt-intent-danger" : ""}`}
+            className={`bp3-input ${passwordError ? "bp3-intent-danger" : ""}`}
             name="login.password"
             type="password"
             placeholder="Password"
           />
-          <p className="pt-form-helper-text">{passwordError}</p>
+          <p className="bp3-form-helper-text">{passwordError}</p>
           <Button type="submit">Submit</Button>
-          <div className="pt-form-helper-text">
+          <div className="bp3-form-helper-text">
             {error ? error.graphQLErrors[0] : ""}
           </div>
         </Form>

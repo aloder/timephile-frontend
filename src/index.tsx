@@ -48,7 +48,6 @@ export const logout = () => {
 }
 export const login = (token: string) => {
   localStorage.setItem('token', token);
-  // window.location.reload()
 }
 
 class Index extends React.Component {

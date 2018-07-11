@@ -78,6 +78,7 @@ export const UPDATE_TIME_LOG = gql`
     $totalTime: Int
     $removeTagIds: [ID!]!
     $addTagIds: [ID!]!
+    $isRange: Boolean
   ) {
     updateTimeLog(
       id: $id
@@ -89,6 +90,7 @@ export const UPDATE_TIME_LOG = gql`
       totalTime: $totalTime
       removeTagIds: $removeTagIds
       addTagIds: $addTagIds
+      isRange: $isRange
     ) {
       id
       title

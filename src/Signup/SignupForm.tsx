@@ -1,4 +1,4 @@
-import { Button, Card } from "@blueprintjs/core";
+import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Field, Form, Formik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";
@@ -9,28 +9,28 @@ const renderFormComponents = (
 ) => {
   return (
     <div style={{ display: "flex", justifyContent: "center", paddingTop: 20 }}>
-      <Card style={{ minWidth: "25%" }}>
-        <h3>Sign Up</h3>
-        <Form className={"pt-form-group pt-intent-danger"}>
+      <Card elevation={Elevation.TWO} style={{ minWidth: "25%" }}>
+        <h2>Sign Up</h2>
+        <Form className={"bp3-form-group bp3-intent-danger"}>
           <Field
-            className={`pt-input ${nameError ? "pt-intent-danger" : ""}`}
+            className={`bp3-input ${nameError ? "bp3-intent-danger" : ""}`}
             name="signup.name"
             placeholder="Full Name"
           />
-          <p className="pt-form-helper-text">{nameError}</p>
+          <p className="bp3-form-helper-text">{nameError}</p>
           <Field
-            className={`pt-input ${emailError ? "pt-intent-danger" : ""}`}
+            className={`bp3-input ${emailError ? "bp3-intent-danger" : ""}`}
             name="signup.email"
             placeholder="Email"
           />
-          <p className="pt-form-helper-text">{emailError}</p>
+          <p className="bp3-form-helper-text">{emailError}</p>
           <Field
-            className={`pt-input ${passwordError ? "pt-intent-danger" : ""}`}
+            className={`bp3-input ${passwordError ? "bp3-intent-danger" : ""}`}
             name="signup.password"
             type="password"
             placeholder="Password"
           />
-          <p className="pt-form-helper-text">{passwordError}</p>
+          <p className="bp3-form-helper-text">{passwordError}</p>
           <Button type="submit">Submit</Button>
         </Form>
       </Card>
