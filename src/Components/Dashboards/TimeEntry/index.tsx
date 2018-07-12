@@ -1,14 +1,13 @@
-import { Card } from '@blueprintjs/core';
-import * as Moment from 'moment';
-import * as React from 'react';
+import { Card } from "@blueprintjs/core";
+import * as Moment from "moment";
+import * as React from "react";
 
-import { IUserProps } from '../../../AuthRequired';
-import TimeLogsRangeQuery from '../../Apollo/Query/TimeLogsRangeQuery';
-import { TimeTagQuery } from '../../Apollo/Query/TimeTagQuery';
-import TimeCircle from '../../CircleSlider/TimeCircle';
-import DateSelector from '../../DateSelector';
-import TimeCardsColumn from '../../TimeCards/TimeCardsColumn';
-import TimeTagsColumn from '../../TimeTagCards';
+import { IUserProps } from "../../../AuthRequired";
+import TimeLogsRangeQuery from "../../Apollo/Query/TimeLogsRangeQuery";
+import TimeCircle from "../../CircleSlider/TimeCircle";
+import DateSelector from "../../DateSelector";
+import TimeCardsColumn from "../../TimeCards/TimeCardsColumn";
+import TimeTagSearchEdit from "../../TimeTagCards/TimeTagsEditor";
 
 class Home extends React.Component<IUserProps, { selectedDate: Date }> {
   public constructor(props: any) {
@@ -30,17 +29,13 @@ class Home extends React.Component<IUserProps, { selectedDate: Date }> {
     endDate.setDate(endDate.getDate() + 1);
     return (
       <div style={ContainerStyle}>
-        <div>
+        <Card style={{ display: "flex", flexDirection: "column" }}>
           <DateSelector
             onChange={event => this.onChange(event)}
             value={selectedDate}
           />
-          <TimeTagQuery>
-            {(data)=>(
-              <TimeTagsColumn data={data} />
-            )}
-          </TimeTagQuery>
-        </div>
+          <TimeTagSearchEdit />
+        </Card>
         <div style={{ ...flexGrow }}>
           <TimeLogsRangeQuery startDate={selectedDate} endDate={endDate}>
             {data => (

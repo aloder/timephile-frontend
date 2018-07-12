@@ -1,10 +1,14 @@
-import { MenuItem } from '@blueprintjs/core';
-import { Suggest } from '@blueprintjs/select';
-import * as React from 'react';
-import { Query } from 'react-apollo';
+import { MenuItem } from "@blueprintjs/core";
+import { Suggest } from "@blueprintjs/select";
+import * as React from "react";
+import { Query } from "react-apollo";
 
-import { ME, TIME_TAGS } from '../../graphql/query';
-import { timeTags, timeTags_timeTags, timeTagsVariables } from '../../graphql/query/__generated__/timeTags';
+import { ME, TIME_TAGS } from "../../graphql/query";
+import {
+  timeTags,
+  timeTags_timeTags,
+  timeTagsVariables
+} from "../../graphql/query/__generated__/timeTags";
 
 const TagSelect = Suggest.ofType<timeTags_timeTags>();
 
@@ -35,7 +39,7 @@ class TimeTagSelectorSuguestion extends React.Component<
                 const items: timeTags_timeTags[] = [];
                 if (data != null && data.timeTags != null) {
                   data.timeTags.forEach(tag => {
-                    if (tag != null) {
+                    if (tag != null && !tag.deleted) {
                       items.push(tag);
                     }
                   });
@@ -43,13 +47,13 @@ class TimeTagSelectorSuguestion extends React.Component<
                 return (
                   <TagSelect
                     inputValueRenderer={tag => tag.name}
-					items={items}
+                    items={items}
                     inputProps={{
-					  onChange: (event: any) => this.handleQueryChange(event),
-					  value: this.state.filter,
-					  placeholder: "Add tag...",
-					  autoFocus: true
-					}}
+                      onChange: (event: any) => this.handleQueryChange(event),
+                      value: this.state.filter,
+                      placeholder: "Add tag...",
+                      autoFocus: true
+                    }}
                     itemRenderer={(
                       { id, name, color },
                       { handleClick, index, modifiers }
@@ -66,19 +70,19 @@ class TimeTagSelectorSuguestion extends React.Component<
                           margin: 2,
                           textAlign: "center"
                         }}
-						text={name}
+                        text={name}
                       />
                     )}
                     itemListPredicate={(query, tags) =>
                       tags.filter(tag =>
                         tag.name.toLowerCase().startsWith(query.toLowerCase())
                       )
-					}
+                    }
                     onItemSelect={tag => {
                       if (this.props.onAdd != null) {
                         this.props.onAdd(tag);
                       }
-					  this.setState({ value: tag, filter: "" });
+                      this.setState({ value: tag, filter: "" });
                     }}
                     noResults={<MenuItem disabled={true} text="No results." />}
                     popoverProps={{
@@ -87,10 +91,9 @@ class TimeTagSelectorSuguestion extends React.Component<
                       backdropProps: {
                         marginHeight: 0,
                         marginWidth: 0
-					  }
-					  
-					}}
-					closeOnSelect={false}
+                      }
+                    }}
+                    closeOnSelect={false}
                     openOnKeyDown={true}
                   />
                 );

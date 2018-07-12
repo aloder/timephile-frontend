@@ -1,14 +1,14 @@
-import { Button, ButtonGroup, Collapse, Intent, Switch, Tag } from '@blueprintjs/core';
-import { Field, Form, FormikProps, withFormik } from 'formik';
-import * as React from 'react';
+import { Button, ButtonGroup, Intent, Switch, Tag } from "@blueprintjs/core";
+import { Field, Form, FormikProps, withFormik } from "formik";
+import * as React from "react";
+import { Collapse } from "react-collapse";
 
-import { UpdateTimeLogVariables } from '../../graphql/mutation/__generated__/UpdateTimeLog';
-import { timeLogs_timeLogs_tags } from '../../graphql/query/__generated__/timeLogs';
-import { timeLogsRange_timeLogsRange } from '../../graphql/query/__generated__/timeLogsRange';
-import AddTimeTagTag from '../Form/AddTimeTagTag';
-import { MyEditableText } from '../Form/MyEditableText';
-import { MyTimePicker } from '../Form/Time/MyTimePicker';
-
+import { UpdateTimeLogVariables } from "../../graphql/mutation/__generated__/UpdateTimeLog";
+import { timeLogs_timeLogs_tags } from "../../graphql/query/__generated__/timeLogs";
+import { timeLogsRange_timeLogsRange } from "../../graphql/query/__generated__/timeLogsRange";
+import AddTimeTagTag from "../Form/AddTimeTagTag";
+import { MyEditableText } from "../Form/MyEditableText";
+import { MyTimePicker } from "../Form/Time/MyTimePicker";
 
 interface IProps extends timeLogsRange_timeLogsRange {
   submit(values: UpdateTimeLogVariables): void;
@@ -31,17 +31,7 @@ class EditCardDisplay extends React.PureComponent<
   public render() {
     const { tags } = this.props.values;
     let dif: boolean = false;
-    const comp = [
-      "id",
-      "title",
-      "text",
-      "date",
-      "startTime",
-      "endTime",
-      "tags",
-      "totalTime",
-      "isRange"
-    ];
+    const comp = Object.keys(this.props.initialValues);
     for (const field of comp) {
       dif = dif || this.props.values[field] !== this.props.initialValues[field];
     }
@@ -57,8 +47,14 @@ class EditCardDisplay extends React.PureComponent<
     const { isRange } = this.props.values;
     return (
       <Form>
-        <div style={{ display: "flex", alignItems: 'center', justifyContent: "space-between" }}>
-          <h3 style={{margin: 2}} hidden={isRange || false}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between"
+          }}
+        >
+          <h3 style={{ margin: 2 }} hidden={isRange || false}>
             <Field
               name="totalTime"
               component={MyEditableText}
@@ -67,7 +63,7 @@ class EditCardDisplay extends React.PureComponent<
             />
             <span style={{ fontSize: 12 }}>mins</span>
           </h3>
-          <h3 style={{margin: 2}}hidden={!isRange}>
+          <h3 style={{ margin: 2 }} hidden={!isRange}>
             <Field
               name="startTime"
               component={MyTimePicker}
@@ -93,8 +89,14 @@ class EditCardDisplay extends React.PureComponent<
             </div>
           </span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between'}}>
-          <h2 style={{margin: 2}}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            justifyContent: "space-between"
+          }}
+        >
+          <h2 style={{ margin: 2 }}>
             <Field
               name="title"
               multiline={true}
@@ -106,33 +108,32 @@ class EditCardDisplay extends React.PureComponent<
             style={{ float: "right" }}
             checked={isRange || false}
             label="Enter range"
-            onChange={() =>{
-              this.props.setFieldValue("isRange", !(isRange || false))
+            onChange={() => {
+              this.props.setFieldValue("isRange", !(isRange || false));
             }}
           />
-
         </div>
         <div style={{ paddingLeft: 10 }}>
           <Field
             name="text"
-            multiline={true}
+            line={true}
             placeholder={"Description..."}
             component={MyEditableText}
           />
         </div>
-        <Collapse isOpen={dif}>
-        <ButtonGroup fill={true} style={{ padding: 10 }}>
-          <Button intent={Intent.SUCCESS} type="submit">
-            Submit
-          </Button>
-          <Button
-            intent={Intent.DANGER}
-            type="cancel"
-            onClick={() => this.props.resetForm()}
-          >
-            Cancel
-          </Button>
-        </ButtonGroup>
+        <Collapse isOpened={dif} springConfig={{ stiffness: 300 }}>
+          <ButtonGroup fill={true} style={{ padding: 10 }}>
+            <Button intent={Intent.SUCCESS} type="submit">
+              Submit
+            </Button>
+            <Button
+              intent={Intent.DANGER}
+              type="cancel"
+              onClick={() => this.props.resetForm()}
+            >
+              Cancel
+            </Button>
+          </ButtonGroup>
         </Collapse>
       </Form>
     );
@@ -146,7 +147,8 @@ class EditCardDisplay extends React.PureComponent<
           "tags",
           this.props.values.tags!.filter(t => t.id !== tag.id)
         );
-      }}>
+      }}
+    >
       {tag.name}
     </Tag>
   );
@@ -191,7 +193,7 @@ export const EditCardView = withFormik<IProps, IFormValues>({
           }
         }
       }
-		}
+    }
     const errors = await props.submit({ removeTagIds, addTagIds, ...values });
     if (errors) {
       setErrors(errors);
