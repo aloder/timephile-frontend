@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Intent, Switch, Tag } from '@blueprintjs/core';
+import { Button, ButtonGroup, Collapse, Intent, Switch, Tag } from '@blueprintjs/core';
 import { Field, Form, FormikProps, withFormik } from 'formik';
 import * as React from 'react';
 
@@ -120,7 +120,8 @@ class EditCardDisplay extends React.PureComponent<
             component={MyEditableText}
           />
         </div>
-        <ButtonGroup hidden={!dif} fill={dif} style={{ padding: 10 }}>
+        <Collapse isOpen={dif}>
+        <ButtonGroup fill={true} style={{ padding: 10 }}>
           <Button intent={Intent.SUCCESS} type="submit">
             Submit
           </Button>
@@ -132,6 +133,7 @@ class EditCardDisplay extends React.PureComponent<
             Cancel
           </Button>
         </ButtonGroup>
+        </Collapse>
       </Form>
     );
   }
