@@ -59,7 +59,7 @@
     "@types/react-router-dom": "^4.2.7",
     "@types/yup": "^0.24.6",
     "apollo": "^1.1.1",
-    "husky": "^0.14.3",
+    "husky": "^1.0.0-rc.13",
     "import-sort-cli": "^4.2.0",
     "import-sort-parser-babylon": "^4.2.0",
     "import-sort-parser-typescript": "^4.2.0",
