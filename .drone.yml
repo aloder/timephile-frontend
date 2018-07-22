@@ -1,6 +1,8 @@
 pipeline:
 
   docker:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     image: plugins/docker
     repo: aloder/timephile-frontend
     tags: latest
