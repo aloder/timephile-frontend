@@ -6,9 +6,8 @@ RUN yarn
 COPY . ./
 RUN yarn build
 
-FROM nginx:1.12-alpine
-RUN rm -rf /etc/nginx/conf.d
-COPY conf /etc/nginx
-COPY --from=builder /usr/src/app/build /usr/share/nginx/html
+FROM node:10.4.1
+COPY --from=builder /usr/src/app/build /usr/src/app/build
+RUN npm i -g serve
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["serve", "/usr/src/app/build", "-p", "80"]
