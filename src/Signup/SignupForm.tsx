@@ -1,92 +1,99 @@
-import { Button, Card, Elevation } from "@blueprintjs/core";
-import { Field, Form, Formik } from "formik";
+import { Button, Card, Elevation, H2 } from "@blueprintjs/core";
+import { Field, Form, FormikProps, withFormik } from "formik";
+import { GraphQLError } from "graphql";
 import * as React from "react";
+import { RouteComponentProps, withRouter } from "react-router";
 import * as Yup from "yup";
-const renderFormComponents = (
-  nameError: any,
-  emailError: any,
-  passwordError: any
-) => {
-  return (
-    <div style={{ display: "flex", justifyContent: "center", paddingTop: 20 }}>
-      <Card elevation={Elevation.TWO} style={{ minWidth: "25%" }}>
-        <h2>Sign Up</h2>
-        <Form className={"bp3-form-group bp3-intent-danger"}>
-          <Field
-            className={`bp3-input ${nameError ? "bp3-intent-danger" : ""}`}
-            name="signup.name"
-            placeholder="Full Name"
-          />
-          <p className="bp3-form-helper-text">{nameError}</p>
-          <Field
-            className={`bp3-input ${emailError ? "bp3-intent-danger" : ""}`}
-            name="signup.email"
-            placeholder="Email"
-          />
-          <p className="bp3-form-helper-text">{emailError}</p>
-          <Field
-            className={`bp3-input ${passwordError ? "bp3-intent-danger" : ""}`}
-            name="signup.password"
-            type="password"
-            placeholder="Password"
-          />
-          <p className="bp3-form-helper-text">{passwordError}</p>
-          <Button type="submit">Submit</Button>
-        </Form>
-      </Card>
-    </div>
-  );
-};
 
-class SigupForm extends React.Component<ISignupProps> {
+import {
+  signup_signup,
+  signupVariables
+} from "../graphql/mutation/__generated__/signup";
+
+class SignupForm extends React.Component<
+  ISignupProps & FormikProps<signupVariables>
+> {
   public render() {
+    const {
+      name: nameError,
+      email: emailError,
+      password: passwordError
+    } = this.props.errors;
+    const { status } = this.props;
     return (
-      <div>
-        <Formik
-          initialValues={{
-            signup: {
-              email: "",
-              name: "",
-              password: ""
-            }
-          }}
-          validationSchema={schema}
-          onSubmit={values => this.props.submit(values.signup)}
-          render={props => {
-            let emailError;
-            let passwordError;
-            let nameError;
-            if (props.errors && props.errors.signup) {
-              if (props.touched.signup && props.touched.signup.email) {
-                emailError = props.errors.signup.email;
-              }
-              if (props.touched.signup && props.touched.signup.name) {
-                nameError = props.errors.signup.name;
-              }
-              if (props.touched.signup && props.touched.signup.password) {
-                passwordError = props.errors.signup.password;
-              }
-            }
-            return renderFormComponents(nameError, emailError, passwordError);
-          }}
-        />
+      <div
+        style={{ display: "flex", justifyContent: "center", paddingTop: 20 }}
+      >
+        <Card elevation={Elevation.TWO} style={{ minWidth: "25%" }}>
+          <H2>Sign Up</H2>
+          <Form className={"bp3-form-group bp3-intent-danger"}>
+            <Field
+              className={`bp3-input ${nameError ? "bp3-intent-danger" : ""}`}
+              name="name"
+              placeholder="Full Name"
+            />
+            <p className="bp3-form-helper-text">{nameError}</p>
+            <Field
+              className={`bp3-input ${emailError ? "bp3-intent-danger" : ""}`}
+              name="email"
+              placeholder="Email"
+            />
+            <p className="bp3-form-helper-text">{emailError}</p>
+            <Field
+              className={`bp3-input ${
+                passwordError ? "bp3-intent-danger" : ""
+              }`}
+              name="password"
+              type="password"
+              placeholder="Password"
+            />
+            <p className="bp3-form-helper-text">{passwordError}</p>
+            <Button type="submit">Submit</Button>
+            <div className="bp3-form-helper-text">
+              {status && status.error
+                ? status.error.map((e: GraphQLError) => e.message)
+                : ""}
+            </div>
+          </Form>
+        </Card>
       </div>
     );
   }
 }
 
-interface ISignupProps {
-  submit(model: { name: string; email: string; password: string }): void;
+interface ISignupProps extends RouteComponentProps<any> {
+  create(
+    variables: signupVariables
+  ): Promise<{
+    errors?: GraphQLError[];
+    signup?: signup_signup;
+  }>;
 }
 const schema = Yup.object().shape({
-  signup: Yup.object().shape({
-    email: Yup.string()
-      .email("Enter a valid email address")
-      .required("Required"),
-    name: Yup.string()
-      .matches(/\w+\s{1}\w+/, "Not a valid full name")
-      .required("Required"),
-    password: Yup.string().required("Required")
-  })
+  email: Yup.string()
+    .email("Enter a valid email address")
+    .required("Required"),
+  name: Yup.string()
+    .matches(/\w+\s{1}\w+/, "Not a valid full name")
+    .required("Required"),
+  password: Yup.string().required("Required")
 });
-export default SigupForm;
+export default withRouter(
+  withFormik<ISignupProps, signupVariables>({
+    mapPropsToValues: () => ({
+      name: "",
+      email: "",
+      password: ""
+    }),
+    validationSchema: schema,
+    handleSubmit: async (vals, { props: { create, history }, setStatus }) => {
+      const { errors, signup } = await create(vals);
+      if (errors) {
+        setStatus({ error: errors });
+      }
+      if (signup) {
+        history.push(`/confirmemail`);
+      }
+    }
+  })(SignupForm)
+);

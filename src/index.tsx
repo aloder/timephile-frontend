@@ -22,6 +22,7 @@ const auth = new ApolloLink((operation, forward) => {
 });
 const client = new ApolloClient({
   cache: new InMemoryCache(),
+
   link: ApolloLink.from([
     auth,
     onError(({ graphQLErrors, networkError }) => {

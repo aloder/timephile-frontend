@@ -31,7 +31,8 @@ class LandingPage extends React.Component<RouteComponentProps<any>> {
                     color: "white",
                     textShadow: "-1px 1px 10px #394b59",
                     border: "2px solid",
-                    boxShadow: "-1px 1px 10px #394b59"
+                    boxShadow: "-1px 1px 10px #394b59",
+                    textAlign: "center"
                   }}
                   onClick={() => this.redirectToSignup()}
                   large={true}
@@ -83,6 +84,10 @@ class LandingPage extends React.Component<RouteComponentProps<any>> {
             large={true}
             fill={true}
             intent={Intent.PRIMARY}
+            style={{
+              fontWeight: "bold",
+              textAlign: "center"
+            }}
           >
             Get Started With Timephile
           </Button>

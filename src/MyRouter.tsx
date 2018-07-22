@@ -8,7 +8,9 @@ import Login from "./Login/Login";
 import NavBar from "./NavBar";
 import Confirm from "./Other/Confirm";
 import ResetPassword from "./Other/ResetPassword";
+import ConfirmEmail from "./Page/ConfirmEmail";
 import LandingPage from "./Page/LandingPage/LandingPage";
+import NotFound from "./Page/NotFound";
 import Signup from "./Signup/Signup";
 
 class MyRouter extends React.Component {
@@ -49,6 +51,12 @@ class MyRouter extends React.Component {
                       </AuthRequired>
                     )}
                   />
+                  <Route
+                    exact={true}
+                    path="/confirmemail"
+                    component={ConfirmEmail}
+                  />
+                  <Route from="*" to="/404" component={NotFound} />
                 </Switch>
               </React.Fragment>
             </Route>
