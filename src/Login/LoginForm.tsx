@@ -1,8 +1,8 @@
-import { Button, Card, Elevation } from '@blueprintjs/core';
-import { ApolloError } from 'apollo-client';
-import { Field, Form, Formik } from 'formik';
-import * as React from 'react';
-import * as Yup from 'yup';
+import { Button, Card, Elevation } from "@blueprintjs/core";
+import { ApolloError } from "apollo-client";
+import { Field, Form, Formik } from "formik";
+import * as React from "react";
+import * as Yup from "yup";
 
 const renderFormComponents = (
   emailError: any,
@@ -29,7 +29,7 @@ const renderFormComponents = (
           <p className="bp3-form-helper-text">{passwordError}</p>
           <Button type="submit">Submit</Button>
           <div className="bp3-form-helper-text">
-            {error ? error.graphQLErrors[0] : ""}
+            {error ? error.graphQLErrors[0].message : ""}
           </div>
         </Form>
       </Card>

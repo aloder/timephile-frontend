@@ -7229,6 +7229,10 @@ react-overlays@^0.8.1:
     react-transition-group "^2.2.0"
     warning "^3.0.0"
 
+react-parallax@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/react-parallax/-/react-parallax-1.8.0.tgz#c7b5e845e3d829e5aedc76e77ac497edea616a22"
+
 react-popper@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-1.0.0.tgz#b99452144e8fe4acc77fa3d959a8c79e07a65084"

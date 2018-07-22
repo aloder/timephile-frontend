@@ -5,13 +5,18 @@ import { Query } from "react-apollo";
 import { logout } from ".";
 import { ME } from "./graphql/query/";
 
-class Nav extends React.Component {
+class Nav extends React.Component<{ landingPage?: boolean }> {
   public componentDidMount() {
     document.title = "Timephile";
   }
   public render() {
+    const { landingPage } = this.props;
+    let styles: React.CSSProperties = {};
+    if (landingPage) {
+      styles = { ...landingPageStyle };
+    }
     return (
-      <Navbar className="bp3-navbar bp3-dark" style={{ height: 50 }}>
+      <Navbar className="bp3-navbar bp3-dark" style={{ height: 50, ...styles }}>
         <Navbar.Group align={Alignment.LEFT}>
           <Navbar.Heading style={{ display: "flex", alignItems: "flex-end" }}>
             <Icon
@@ -67,5 +72,11 @@ class Nav extends React.Component {
     );
   }
 }
+const landingPageStyle: React.CSSProperties = {
+  backgroundColor: "transparent",
+  boxShadow: "none",
+  position: "absolute",
+  top: 0
+};
 
 export default Nav;
