@@ -4,6 +4,7 @@ WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 RUN yarn
 COPY . ./
+ENV REACT_APP_BACKEND_URI http://apidev.timephile.com
 RUN yarn build
 
 FROM node:10.4.1
