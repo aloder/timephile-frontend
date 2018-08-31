@@ -5,10 +5,10 @@ import Thumb from './Thumb';
 import Track from './Track';
 import { getRelativeAngle, pipe, toDeg, toRad } from './utils';
 
-class App extends React.Component<ICircleProps, IArc> {
+class CircleSlider extends React.Component<ICircleProps, IArc> {
   public static defaultProps: ICircleDefaultProps= {
     r: 200,
-    initialAngle: -90,
+    initialAngle: 0,
     trackWidth: 50,
     trackColor: '#f5f5dc',
     arcColor: '#7985f1',
@@ -16,8 +16,8 @@ class App extends React.Component<ICircleProps, IArc> {
     thumbColor: 'white',
     thumbBorderWidth: 5,
     thumbBorderColor: '#cccccc',
+    clickable: false,
     onChange: (value: any) => undefined
-    
   }
   
   constructor(props: ICircleProps) {
@@ -48,6 +48,9 @@ class App extends React.Component<ICircleProps, IArc> {
     }
   }
   private trackSelect = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!(this.props as PropsWithDefaults).clickable){
+      return;
+    }
     const index = this.makeArc(event);
     if (index) {
       document.addEventListener('mousemove', (ev) => this.moveArc(ev, index))
@@ -55,7 +58,9 @@ class App extends React.Component<ICircleProps, IArc> {
   }
 
   private handleSelect = (event: React.MouseEvent<HTMLDivElement>, index: number, angle: number) => {
-    console.warn("select");
+    if (!(this.props as PropsWithDefaults).clickable){
+      return;
+    }
     this.trackLeave()
     document.addEventListener('mousemove', (ev) => this.moveArc(ev, index))
     this.setState({currentArcIndex: index, currentAngle: angle})
@@ -72,7 +77,7 @@ class App extends React.Component<ICircleProps, IArc> {
 
   private calculateAngle = (mouseX: number, mouseY: number) => {
     const { r }  = this.props as PropsWithDefaults;
-    const x = mouseX - r - this.offsets.left;
+    const x = mouseX - r  - this.offsets.left;
     const y = - mouseY + r + this.offsets.top;
     const angle = toDeg(Math.atan(y / x)) +
       ((x < 0) ? 180 : 0) +
@@ -91,13 +96,13 @@ class App extends React.Component<ICircleProps, IArc> {
     const colors: string[] =  JSON.parse(JSON.stringify(this.state.colors));
     const color = colors.pop();
     if (!color) { return; }
-    const index = newState.push({ angles: [angle+5, angle], color }) - 1;
+    const index = newState.push({ angles: [angle+5, angle], color, id: newState.length.toString() }) - 1;
     this.setState({ arcs: newState, currentArcIndex: index, currentAngle: 1, colors })
     return index;
   }
 
   private moveArc = (evt: any, index: number) => {
-    const { currentArcIndex, currentAngle } = this.state;
+    const { currentArcIndex, currentAngle, arcs } = this.state;
     if (currentArcIndex !== index){
       return;
     }
@@ -113,7 +118,21 @@ class App extends React.Component<ICircleProps, IArc> {
     const newState: IArcObj[] = JSON.parse(JSON.stringify(this.state.arcs));
     const angles = newState[index].angles;
     const otherAngle = (currentAngle) ? 0 : 1;
-    
+    for (const arc of arcs){
+      if (arc.id === arcs[currentArcIndex].id){
+        continue;
+      }
+      if(arc.angles[0] < arc.angles[1]){
+        if ((arc.angles[0] >= angle) || (angle >= arc.angles[1])){
+
+          return
+        }
+      } else {
+        if (arc.angles[0] >= angle && angle >= arc.angles[1]){
+          return
+        }
+      }
+    }
     if (angles[otherAngle] - 5 < angle && angle < angles[otherAngle] + 5) {
       return;
     }
@@ -155,6 +174,7 @@ class App extends React.Component<ICircleProps, IArc> {
       ret.push(
         <Arc
           r={r}
+          key={`Actual ${arc.id}`}
           initialAngle={arc.angles[0]}
           angle={arc.angles[1]}
           width={trackWidth}
@@ -163,6 +183,7 @@ class App extends React.Component<ICircleProps, IArc> {
       );
       ret.push(
           <Thumb
+            key={`Thumb1 ${arc.id}`}
             diameter={trackWidth}
             color={'#ac956a'}
             borderWidth={5}
@@ -170,15 +191,18 @@ class App extends React.Component<ICircleProps, IArc> {
             handleSelect={(event: any) => this.handleSelect(event, index, 0)}
             rotate={arc.angles[0]}
             position={this.calculateThumbPosition(arc.angles[0])}
+            show={(this.props as PropsWithDefaults).clickable}
           />);
       ret.push(<Thumb
             diameter={trackWidth}
+            key={`Thumb2 ${arc.id}`}
             color={'#ac956a'}
             borderWidth={5}
             handleSelect={(event: any) => this.handleSelect(event, index, 1)}
             borderColor={'gray'}
             rotate={arc.angles[1]}
             position={this.calculateThumbPosition(arc.angles[1])}
+            show={(this.props as PropsWithDefaults).clickable}
           />)
 
     }
@@ -219,6 +243,7 @@ interface ICircleProps {
   thumbColor?: string;
   thumbBorderWidth?: number;
   thumbBorderColor?: string;
+  clickable?:boolean;
   onChange?(event: any): any;
 }
 
@@ -230,6 +255,7 @@ interface ICircleDefaultProps {
   arcColor: string;
   thumbWidth: number;
   thumbColor: string;
+  clickable: boolean;
   thumbBorderWidth: number;
   thumbBorderColor: string;
   onChange(event: any): any;
@@ -242,8 +268,10 @@ interface IArc {
 }
 export interface IArcObj {
   angles: number[];
-  color: string
+  title?: string;
+  id?: string;
+  color: string;
 }
 type PropsWithDefaults = ICircleProps & ICircleDefaultProps;
 
-export default App;
+export default CircleSlider;
